@@ -12,7 +12,7 @@ const download = () => {
             </div>
             <div className='flex-1 flex-col items-center justify-center ml-40'>
                 <h2 className='bold-32 text-blue-70'> Stay Connected with Your <br/>
-                Child's Preschool Journey!!<Image src="/rocket.jpg" alt='rocket' width={24} height={24}/> </h2>
+                Child&apos;s Preschool Journey!!<Image src="/rocket.jpg" alt='rocket' width={24} height={24}/> </h2>
                 <p className='regular-18 mt-3'>
                 Do Not miss the chance to get the latest updates <br/> And cherish every moment with the MyKiddoNest App
                 </p>
