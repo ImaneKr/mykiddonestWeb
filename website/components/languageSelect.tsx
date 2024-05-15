@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 const LanguageSelect = () => {
   const [selectedLanguage, setSelectedLanguage] = useState('');
 
-  const handleLanguageChange = (e) => {
+  const handleLanguageChange = (e: any) => {
     setSelectedLanguage(e.target.value);
   };
 
@@ -17,7 +17,7 @@ const LanguageSelect = () => {
       >
         <option value="en" >English</option>
         <option value="fr">French</option>
-       
+
       </select>
     </div>
   );
