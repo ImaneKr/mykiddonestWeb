@@ -1,7 +1,7 @@
 // components/Popup.js
 import React from 'react';
 
-const Popup = ({ isOpen, onClose, children }) => {
+const Popup = ({ isOpen, onClose, children }: any) => {
   if (!isOpen) return null;
 
   return (
