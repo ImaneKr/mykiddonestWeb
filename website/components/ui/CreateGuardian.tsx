@@ -13,13 +13,15 @@ const CreateGuardianAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => 
 
 
   const [formValues, setFormValues] = useState({
-    firstname: '', lastname: '', gender: '', email: '', phone_number: '', username: '', acc_pic: '', guardian_pwd: '', civilstate: '', address: ''
+    firstname: '', lastname: '', gender: '', email: '', phone_number: '', username: '', acc_pic: '', guardian_pwd: '', civilState: '', address: ''
   });
-  const { firstname, lastname, gender, username, guardian_pwd, civilstate, email, phone_number, address, acc_pic } = formValues;
+  const { firstname, lastname, gender, username, guardian_pwd, civilState, email, phone_number, address, acc_pic } = formValues;
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    console.log("Input changed:", name, value); // Add this line for debugging
     setFormValues({ ...formValues, [name]: value });
   };
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -27,25 +29,14 @@ const CreateGuardianAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => 
     e.preventDefault();
 
     try {
-      const response = await axios.post(`${backendURL}/guardian`, {
-        firstname,
-        lastname,
-        gender,
-        username,
-        guardian_pwd,
-        civilstate,
-        email,
-        phone_number,
-        address,
-        acc_pic
-      });
-      console.log(formValues);
+      const response = await axios.post(`${backendURL}/guardian`, formValues);
       console.log(response.data);
+      setOpen(false); // Close dialog after successful submission
     } catch (error: any) {
       console.error('Error:', error.response);
     }
 
-    setOpen(false);
+
   };
 
   const [selectedImagePath, setSelectedImagePath] = useState<string>('');
@@ -173,12 +164,12 @@ const CreateGuardianAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => 
             </p>
             <TextField
               type='text'
-              name='civilstate'
+              name='civilState'
               placeholder='civil state '
               autoFocus
               size='small'
               className=' lg:w-56 w-[99%]'
-              value={formValues.civilstate}
+              value={formValues.civilState}
               onChange={handleInputChange}
             />
           </div>

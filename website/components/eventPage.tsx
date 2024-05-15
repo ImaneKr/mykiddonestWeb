@@ -2,6 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import ListingEvents from './listingEvents'; 
 import { addEvent, Event } from '@/models/eventsList';
 import ImagePicker from './ui/imagePicker';
+import axios from 'axios';
+
+const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 const EventPage = () => {
   const [isEventPressed, setIsEventPressed] = useState(false);
@@ -17,24 +20,25 @@ const EventPage = () => {
   const handleEventButtonClick = () => {
     setIsEventPressed(!isEventPressed);
   };
+ 
+  const [eventTitle, setEventTitle] = useState('');
+  const [eventDate, setEventDate] = useState('');
+  const [refreshEvents, setRefreshEvents] = useState<boolean>(false); // State to trigger event list refresh
+  
+///// submit for creating the event
+  const handleSubmit = async() => {
+    try {
+      const response = await axios.post(`${backendURL}/event`, {
+        event_name: eventTitle,
+        event_date: eventDate,
+        event_image: selectedImagePath
+      });
 
-  const handleSubmit = () => {
-    const titleInput = document.getElementById("eventTitle") as HTMLInputElement;
-    const dateInput = document.getElementById("eventDate") as HTMLInputElement;
-
-    if (titleInput && dateInput && titleInput.value && dateInput.value) {
-      const eventData: Event = {
-        title: titleInput.value,
-        date: new Date(dateInput.value),
-        imgPath: selectedImagePath,
-      };
-      addEvent({
-  title: "New Event",
-  date: new Date('2024-04-08'),
-});
+      console.log('Event created:', response.data);
       setIsEventPressed(false);
-    } else {
-      alert('Please fill in all fields.');
+    } catch (error) {
+      // Handle error
+      console.error('Error creating event:', error);
     }
   };
 
@@ -56,6 +60,8 @@ const EventPage = () => {
             id="eventTitle"
             type='text'
             className={`w-full border  rounded-md px-2 py-1 ${!isEventPressed ? 'border-gray-15' : 'border-blue-90'} group focus:border-2 focus:border-blue-90 focus:outline-none`}
+            value={eventTitle}
+            onChange={(e)=>setEventTitle(e.target.value)}
             placeholder='Title'
             disabled={!isEventPressed}
           />
@@ -63,7 +69,8 @@ const EventPage = () => {
             id="eventDate"
             type='date'
             className={`w-full border  rounded-md px-2 py-1 placeholder-gray-15 ${!isEventPressed ? 'border-gray-15' : 'border-blue-90'} group focus:border-2 focus:border-blue-90 focus:outline-none`}
-            defaultValue=''
+            value={eventDate}
+            onChange={(e) => setEventDate(e.target.value)}
             disabled={!isEventPressed}
           />
           <div id="newEvent" className={`flex flex-col w-full border-2 border-dashed  rounded-md  ${!isEventPressed ? 'border-gray-15 opacity-50' : 'border-blue-400 '}`}>

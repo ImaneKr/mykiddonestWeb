@@ -2,34 +2,50 @@ import { Button, Dialog, DialogActions, DialogContent, FormControlLabel, Radio, 
 import { useState } from 'react'
 import ImagePicker from './imagePicker';
 import React from 'react';
+import axios from 'axios';
+
+const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 interface FormDialogProps {
-    open: boolean;
-    setOpen: (value: boolean) => void;
+  open: boolean;
+  setOpen: (value: boolean) => void;
 }
-const CreateStaffAccount : React.FC<FormDialogProps> =  ({ open, setOpen }) => {
-   
-    const [formValues, setFormValues] = useState({ name: '', email: '',phone:'', username:'', profileImage:'',password:''});
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setFormValues({ ...formValues, [e.target.name]: e.target.value });
-    };
-   const handleClose = () => {
-        setOpen(false);
-    };
-    const handleSubmit = (e: React.FormEvent) => {
-      e.preventDefault();
-      console.log(formValues);
-      setOpen(false);
-    };
+const CreateStaffAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => {
 
-   const [selectedImagePath,setSelectedImagePath] =useState<string>('');
-    
+  const [formValues, setFormValues] = useState({ firstname: '', lastname: '', email: '', phone_number: '', username: '', staff_pic: '', staff_pwd: '', role: '' });
+  const { firstname, lastname, username, role, email, phone_number, staff_pic, staff_pwd } = formValues;
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    console.log("Input changed:", name, value); // Add this line for debugging
+    setFormValues({ ...formValues, [name]: value });
+  };
+  const handleImageSelected = (selectedImagePath: string) => {
+    setFormValues({ ...formValues, staff_pic: selectedImagePath });
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(`${backendURL}/staff`, formValues);
+      console.log(response.data);
+      setOpen(false);
+    } catch (error: any) {
+      console.error('Error:', error.response);
+    }
+  };
+
+  const [selectedImagePath, setSelectedImagePath] = useState<string>('');
+
   return (
     <React.Fragment>
-       <button className='inline-block px-2 py-1 text-white bg-blue-90 rounded-md '
-            onClick={() => setOpen(true)}
-            >
-            + New Profile   
+      <button className='inline-block px-2 py-1 text-white bg-blue-90 rounded-md '
+        onClick={() => setOpen(true)}
+      >
+        + New Profile
       </button>
       <Dialog
         open={open}
@@ -41,116 +57,129 @@ const CreateStaffAccount : React.FC<FormDialogProps> =  ({ open, setOpen }) => {
         fullWidth={true}
       >
         <DialogContent className=' flex flex-col mb-8'>
-         <div className=''>
-           <ImagePicker onImageSelected={setSelectedImagePath} disabled={false} isProfilePic={true} profilePic=''/>
-         </div>
+          <div className=''>
+            <ImagePicker onImageSelected={handleImageSelected} disabled={false} isProfilePic={true} profilePic='' />
+          </div>
           <hr className='m-2.5' />
           <div className='flex justify-between lg:flex-row flex-col mb-3 px-8'>
             <p className='lg:regular-18 regular-16'>
-            First Name
-           </p>
-          <TextField 
-           type='text'
-           name='first name'
-           placeholder='First Name'
-           autoFocus
-           size='small'
-           //value={accountInfo.name}
-            className=' lg:w-56 w-[99%]'
-           />
+              First Name
+            </p>
+            <TextField
+              type='text'
+              name='firstname'
+              placeholder='First Name'
+              autoFocus
+              size='small'
+              value={formValues.firstname}
+              onChange={handleInputChange}
+              className=' lg:w-56 w-[99%]'
+            />
           </div>
-         <div className='flex justify-between lg:flex-row flex-col mb-3 px-8'>
+          <div className='flex justify-between lg:flex-row flex-col mb-3 px-8'>
             <p className='lg:regular-18 regular-16'>
-            Last Name
-           </p>
-          <TextField 
-           type='text'
-           name='last name'
-           placeholder='Last Name'
-           autoFocus
-           size='small'
-           //value={accountInfo.name}
-            className=' lg:w-56 w-[99%]'
-           />
+              Last Name
+            </p>
+            <TextField
+              type='text'
+              name='lastname'
+              placeholder='Last Name'
+              autoFocus
+              size='small'
+              value={formValues.lastname}
+              onChange={handleInputChange}
+              className=' lg:w-56 w-[99%]'
+            />
           </div>
-          
-          
+
+
           <div className='flex justify-between  lg:flex-row flex-col mb-3 px-8'>
             <p className='lg:regular-18 regular-16'>
-            Role
-         </p>
-           <RadioGroup
-           aria-labelledby="demo-radio-buttons-group-label"
-           defaultValue="Teacher"
-           name="radio-buttons-group"
-           className=' flex flex-row justify-between'
-          >
-            <FormControlLabel value="Secretry" control={<Radio />} label="Sacretary" />
-            <FormControlLabel value="Teacher" control={<Radio />} label="Teacher" />
-         </RadioGroup>
-          
+              Role
+            </p>
+            <RadioGroup
+              aria-labelledby="demo-radio-buttons-group-label"
+              defaultValue="Teacher"
+              name="role"
+              value={formValues.role}
+              onChange={handleInputChange}
+              className=' flex flex-row 
+           justify-between'
+            >
+              <FormControlLabel value="secretary" control={<Radio />} label="Sacretary" />
+              <FormControlLabel value="teacher" control={<Radio />} label="Teacher" />
+            </RadioGroup>
+
           </div>
 
           <div className='flex   justify-between lg:flex-row flex-col mb-3 px-8'>
             <p className='lg:regular-18 regular-16'>
-            Username
-           </p>
-          <TextField 
-           type='text'
-           name='username'
-           placeholder='username'
-           autoFocus
-           size='small'
-            className=' lg:w-56 w-[99%]'
-           //value={accountInfo.allergies}
-           />
+              Username
+            </p>
+            <TextField
+              type='text'
+              name='username'
+              placeholder='username'
+              autoFocus
+              size='small'
+              className=' lg:w-56 w-[99%]'
+              value={formValues.username}
+              onChange={handleInputChange}
+
+            />
           </div>
           <div className='flex   justify-between lg:flex-row flex-col mb-3 px-8'>
             <p className='lg:regular-18 regular-16'>
-            Email Address
-           </p>
-          <TextField 
-           type='email'
-           name='email'
-           helperText
-           autoFocus
-           size='small'
-            className=' lg:w-56 w-[99%]'
-           //={accountInfo.syndromes}
-           />
+              Email Address
+            </p>
+            <TextField
+              type='email'
+              name='email'
+              helperText
+              autoFocus
+              size='small'
+              className=' lg:w-56 w-[99%]'
+              value={formValues.email}
+              onChange={handleInputChange}
+
+            />
           </div>
           <div className='flex   justify-between lg:flex-row flex-col mb-3 px-8'>
             <p className='lg:regular-18 regular-16'>
-            Phone Number
-           </p>
-          <TextField 
-           type='text'
-           name='phoneNumber'
-           helperText
-           autoFocus
-           size='small'
-            className=' lg:w-56 w-[99%]'
-           //={accountInfo.syndromes}
-           />
+              Phone Number
+            </p>
+            <TextField
+              type='text'
+              name='phone_number'
+              helperText
+              autoFocus
+              size='small'
+              className=' lg:w-56 w-[99%]'
+              value={formValues.phone_number}
+              onChange={handleInputChange}
+
+            />
           </div>
           <div className='flex   justify-between lg:flex-row flex-col mb-3 px-8'>
             <p className='lg:regular-18 regular-16'>
-            Password
-           </p>
-          <TextField 
-           type='password'
-           name='password'
-           autoFocus
-           size='small'
-            className=' lg:w-56 w-[99%]'
-           //value={accountInfo.hobbies}
-           />
+              Password
+            </p>
+            <TextField
+              type='password'
+              name='staff_pwd'
+              autoFocus
+              size='small'
+              className=' lg:w-56 w-[99%]'
+              value={formValues.staff_pwd}
+              onChange={handleInputChange}
+
+            />
           </div>
-          
+
         </DialogContent>
         <DialogActions className='pr-10'>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
-          <Button  type='submit' className='bg-blue-600 text-white inline-block px-2 rounded-lg'> Submit </Button>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleSubmit} type='submit' className='bg-blue-600 text-white inline-block px-2 rounded-lg'> Submit </Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

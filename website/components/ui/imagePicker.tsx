@@ -12,6 +12,7 @@ type ImagePickerProps = {
   mealPic?: string;
   forCreation?:boolean;
   onImageSelected: (imgPath: string) => void;
+  
 };
 
 const ImagePicker: React.FC<ImagePickerProps> = ({

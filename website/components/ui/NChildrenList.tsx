@@ -1,6 +1,6 @@
-import { Button, Dialog, DialogActions, DialogContent, IconButton , TextField } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, IconButton, Slider, TextField } from '@mui/material';
 import { DataGrid, GridActionsCellItem, GridCellParams, GridColDef } from '@mui/x-data-grid';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { FiEdit3 } from 'react-icons/fi';
 import Image from 'next/image';
 import { RiDeleteBin6Line } from 'react-icons/ri';
@@ -8,17 +8,23 @@ import ImagePicker from './imagePicker';
 import GuardianField from '../guardianField';
 import SliderComponent from './slider';
 import { HiOutlineClipboardList } from 'react-icons/hi';
+import axios from 'axios';
+const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
+
 
 interface Row {
-  id: number; 
-  profile: string;
+  id: number;
+  prof_pic: string;
   name: string;
   age: string;
-  guardian:string;
-  category:string ; 
-  RegestratedDate:string;
+  guardian: any; // Change from guardian_id to guardian name
+  category: any; // Change from category_id to category name
+  RegestratedDate: string
 }
-
+interface SliderProps {
+  initialValue: number;
+  color: string;
+}
 // Define the props for EditUserActionItem
 interface EditKidActionItemProps {
   row: Row;
@@ -29,12 +35,15 @@ interface EditKidActionItemProps {
 // EditUserActionItem component
 const EditKidActionItem: React.FC<EditKidActionItemProps> = ({ row, deleteKid, scrollToEvaluation }) => {
   const evaluationRef = useRef<HTMLHeadingElement>(null);
-  
+
   const handleSwipeToEvaluation = () => {
     if (evaluationRef.current) {
       evaluationRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
+  const [value, setValue] = useState<number>(0);
+
 
   const colors: string[] = ['text-orange-400', 'text-blue-400', 'text-green-90'];
   const [open, setOpen] = React.useState(false);
@@ -44,7 +53,13 @@ const EditKidActionItem: React.FC<EditKidActionItemProps> = ({ row, deleteKid, s
     { subject: 'History', percentage: 75 },
     // Add more subjects and percentages as needed
   ];
-
+  const [percentages, setPercentages] = useState<number[]>(subjectsAndPercentages.map(item => item.percentage));
+  const handleChange = (newValue: number, index: number) => {
+    console.log(newValue)
+    const newPercentages = [...percentages]; // Create a copy of the percentages array
+    newPercentages[index] = newValue; // Update the percentage for the corresponding subject
+    setPercentages(newPercentages); // Update the state with the new percentages
+  };
   const handleEdit = () => {
     setOpen(true);
     // You can also pass 'row' to your dialog form here.
@@ -55,7 +70,7 @@ const EditKidActionItem: React.FC<EditKidActionItemProps> = ({ row, deleteKid, s
   };
   const [selectedImagePath, setSelectedImagePath] = useState<string>('');
 
-  const [profileInfo, setProfileInfo] = useState({ profilepic: row.profile, name: row.name, dateOfBirth: '', allergies: '', syndromes: '', hobbies: '', authorizedPicUpPersons: '' });
+  const [profileInfo, setProfileInfo] = useState({ profilepic: row.prof_pic, name: '', dateOfBirth: '', allergies: '', syndromes: '', hobbies: '', authorizedPicUpPersons: '' });
   const [isChangingAllowed, setIsChangingAllowed] = useState(false);
   const allowChanges = () => {
     setIsChangingAllowed(!isChangingAllowed);
@@ -76,10 +91,10 @@ const EditKidActionItem: React.FC<EditKidActionItemProps> = ({ row, deleteKid, s
       >
         <DialogContent className=' flex flex-col  w-full '>
           <div className='flex flex-row justify-between w-full  items-center lg:pr-10 lg:pl-5'>
-            <div className='flex h-30 w-30'><ImagePicker onImageSelected={setSelectedImagePath} disabled={!isChangingAllowed} isProfilePic={true} profilePic={row.profile} /></div>
+            <div className='flex h-30 w-30'><ImagePicker onImageSelected={setSelectedImagePath} disabled={!isChangingAllowed} isProfilePic={true} profilePic={row.prof_pic} /></div>
             <div className='flex flex-row  justify-between lg:pr-20  items-center'> <p className='text-3xl font-semibold font-sans'>{profileInfo.name}</p>
-            <div className='flex flex-row w-full justify-end pl-10'><Button className='flex w-8 h-8 pt-1 text-slate-600' onClick={allowChanges}><FiEdit3 className='w-full h-full ' /></Button>
-              <Button onClick={handleSwipeToEvaluation} className='flex w-8 h-8 pt-1 text-slate-600'><HiOutlineClipboardList className='w-full h-full' /></Button></div>
+              <div className='flex flex-row w-full justify-end pl-10'><Button className='flex w-8 h-8 pt-1 text-slate-600' onClick={allowChanges}><FiEdit3 className='w-full h-full ' /></Button>
+                <Button onClick={handleSwipeToEvaluation} className='flex w-8 h-8 pt-1 text-slate-600'><HiOutlineClipboardList className='w-full h-full' /></Button></div>
             </div>
           </div>
           <hr className={`m-2.5`} />
@@ -108,8 +123,15 @@ const EditKidActionItem: React.FC<EditKidActionItemProps> = ({ row, deleteKid, s
               <div key={index} className='flex flex-row w-full justify-between items-center'>
                 <h3 className='flex w-1/3'>{subject}</h3>
                 <div className='flex flex-row w-full justify-start items-center'>
-                  <SliderComponent initialValue={percentage} color={colors[index % 3]} />
-                  <h1 className={colors[index % 3]}>%</h1>
+                  <Slider
+
+                    onChange={(event, newValue) => handleChange(newValue as number, index)}
+                    min={0}
+                    max={100}
+                    aria-labelledby="continuous-slider"
+                    className={colors[index]}
+                  />
+                  <h1 className={colors[index % 3]}>{percentages[index]}%</h1>
                 </div>
               </div>
             ))}
@@ -134,11 +156,54 @@ const EditKidActionItem: React.FC<EditKidActionItemProps> = ({ row, deleteKid, s
 const KidList = () => {
   const today = new Date();
   const formattedDate = today.toLocaleDateString('en-GB');
-  const InitialRows: Row[] = [
-    { id: 1, profile: '/person-3.png', name: 'Mariem', age: '5', guardian: 'Mohammed', category: 'A', RegestratedDate: '' }
-  ];
+  const [rows, setRows] = React.useState<Row[]>([]);
+  useEffect(() => {
+    const fetchGuardianName = async (guardianId: number) => {
+      try {
+        const response = await axios.get(`${backendURL}/guardian/${guardianId}`);
+        return response.data.firstname + ' ' + response.data.lastname;
+      } catch (error) {
+        console.error(`Error fetching guardian name for guardian ID ${guardianId}:`, error);
+        return 'Unknown Guardian';
+      }
+    };
 
-  const [rows, setRows] = React.useState<Row[]>(InitialRows);
+    const fetchCategoryName = async (categoryId: number) => {
+      try {
+        const response = await axios.get(`${backendURL}/category/${categoryId}`);
+        return response.data.category_name;
+      } catch (error) {
+        console.error(`Error fetching category name for category ID ${categoryId}:`, error);
+        return 'Unknown Category';
+      }
+    };
+    const fetchKids = async () => {
+      try {
+        const response = await axios.get(`${backendURL}/kid`);
+        const data = response.data;
+        console.log(data);
+        const formattedRows = await Promise.all(data.map(async (row: any) => {
+          const guardianName = await fetchGuardianName(row.guardian_id);
+          const categoryName = await fetchCategoryName(row.category_id);
+          return {
+            id: row.kid_id,
+            prof_pic: row.prof_pic,
+            name: `${row.firstname} ${row.lastname}`,
+            age: row.age,
+            guardian: guardianName,
+            category: categoryName,
+            RegestratedDate: new Date(row.prof_time_creation).toLocaleDateString(),
+          };
+        }));
+        setRows(formattedRows);
+      } catch (error) {
+        console.error('Error fetching kid profiles:', error);
+      }
+    };
+
+    fetchKids();
+  }, []);
+
 
   const deleteUser = React.useCallback(
     (id: number) => () => {
@@ -152,7 +217,7 @@ const KidList = () => {
   const columns = React.useMemo<GridColDef<Row>[]>(
     () => [
       {
-        field: 'profile',
+        field: 'prof_pic',
         headerName: '',
         headerClassName: ' hidden justify-center bold-20',
         width: 60,
@@ -175,20 +240,20 @@ const KidList = () => {
         flex: 1,
       },
       {
-        field: 'guardian',
+        field: 'guardian_name',
         headerName: 'Guardian',
         headerClassName: ' justify-center bold-20',
         flex: 1,
       },
       {
-        field: 'category',
+        field: 'category_name',
         headerName: 'Category',
         headerClassName: ' justify-center bold-20',
         flex: 1,
       },
       {
-        field: 'RegestratedDtae',
-        headerName: 'Regestrated Date',
+        field: 'RegestratedDate',
+        headerName: 'Registered Date',
         headerClassName: ' justify-center bold-20 ',
         flex: 1,
       },
@@ -199,7 +264,7 @@ const KidList = () => {
         getActions: (params: GridCellParams<Row>) => [
           <EditKidActionItem key={1} row={params.row} deleteKid={deleteUser(Number(params.id))} scrollToEvaluation={function (): void {
             throw new Error('Function not implemented.');
-          } } />,
+          }} />,
         ]
       }
     ],

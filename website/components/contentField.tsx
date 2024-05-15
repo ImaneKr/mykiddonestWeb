@@ -7,9 +7,10 @@ type Args = {
    initialDate?: Date ;
    isDate?:boolean;
    isEvent?:boolean;
+   onChange?: any;
 };
 
-const ContentField = ({ label, initialValue, initialDate, isDate, isEvent }: Args) => {
+const ContentField = ({ label, initialValue, onChange, initialDate, isDate, isEvent }: Args) => {
     const [value, setValue] = useState(isDate && initialDate ? initialDate.toISOString().split('T')[0] : initialValue || '');
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
