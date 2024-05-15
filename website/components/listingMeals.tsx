@@ -76,7 +76,7 @@ const ListingMeals: React.FC<{ allow: boolean }> = ({ allow }) => {
     console.log('Delete meal at index', dayIndex, mealIndex);
   };
 
-  const addMealItem = async () => {
+  /*const addMealItem = async () => {
     try {
       const { day } = lunchMenus[selectedIndex!]; // Assuming selectedIndex is set somewhere when selecting a day
   
@@ -99,7 +99,7 @@ const ListingMeals: React.FC<{ allow: boolean }> = ({ allow }) => {
       console.error('Error adding meal item:', error);
       // Handle error
     }
-  };
+  };*/
 
   const handleCloseCreateDialog = () => {
     setCreateDialogOpen(false);
@@ -131,7 +131,7 @@ const ListingMeals: React.FC<{ allow: boolean }> = ({ allow }) => {
                   <BiDotsVerticalRounded onClick={() => toggleActions(index)} />
                   {showActions[index] && (
                     <div className="absolute top-1 right-1 bg-white p-2 rounded-md shadow" style={{ zIndex: 999 }}>
-                      <MealActions onDelete={() => deleteMeal(index, 0)} onCreate={() => createMeal(index, 0)} />
+                      <MealActions onDelete={() => deleteMeal(index, 0)} onCreate={() => { }} />
                     </div>
                   )}
                 </div>
