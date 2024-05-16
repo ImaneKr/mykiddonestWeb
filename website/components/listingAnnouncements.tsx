@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import announcementsList from '@/models/announcementsList'; // Assuming you have a type/interface for Announcement
 import Image from 'next/image';
-import PopUp from './ui/popUp';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
 import { FiEdit3 } from 'react-icons/fi';
 import { TbTrash } from 'react-icons/tb';
@@ -58,7 +57,7 @@ const ListingAnnouncements: React.FC = () => {
     }
   };
 
-  const deleteAnnouncement = async(index: number) => {
+  const deleteAnnouncement = async (index: number) => {
     try {
       const announcementIdToDelete = announcements[index].announcement_id; // Get the announcement ID from the announcements array
       const response = await axios.delete(`${backendURL}/announcement/${announcementIdToDelete}`);
@@ -72,7 +71,7 @@ const ListingAnnouncements: React.FC = () => {
     }
   };
 
-  const editAnnouncement = async(index: number, announcementData:any) => {
+  const editAnnouncement = async (index: number, announcementData: any) => {
     try {
       const response = await axios.put(`${backendURL}/announcement/${announcements[index].announcement_id}`, announcementData);
       console.log('announcement edited:', response.data);
@@ -85,7 +84,7 @@ const ListingAnnouncements: React.FC = () => {
       console.error('Error editing announcement:', error);
     }
   };
-  
+
   const handleSubmit = async () => {
     if (selectedIndex !== null) {
       const announcementData = {
@@ -124,7 +123,7 @@ const ListingAnnouncements: React.FC = () => {
             <BiDotsVerticalRounded onClick={() => toggleActions(index)} />
             {showActions[index] && (
               <div className='absolute top-4 border border-gray-300 shadow-2xl right-2 bg-white p-2 rounded-md' style={{ zIndex: 999 }}>
-                <AnnouncementActions onDelete={() => deleteAnnouncement(index)} onEdit={ () => handleEdit(index)} />
+                <AnnouncementActions onDelete={() => deleteAnnouncement(index)} onEdit={() => handleEdit(index)} />
               </div>
             )}
           </div>
@@ -150,11 +149,6 @@ const ListingAnnouncements: React.FC = () => {
             </div>
           </DialogActions>
         </Dialog>
-      </div>
-      <div className='absolute  flex bottom-40 right-0 z-50'>
-        <PopUp trigger={false}>
-          <p>You can put any content you want in here.</p>
-        </PopUp>
       </div>
     </div>
   );

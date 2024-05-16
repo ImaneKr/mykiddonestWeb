@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import eventsList from '@/models/eventsList';
 import Image from 'next/image';
-import PopUp from './ui/popUp';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
 import { FiEdit3 } from 'react-icons/fi';
 import { TbTrash } from 'react-icons/tb';

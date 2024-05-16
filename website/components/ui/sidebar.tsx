@@ -12,11 +12,11 @@ import { GoSignOut } from "react-icons/go";
 import Link from "next/link";
 import Image from "next/image";
 // Retrieve the user's role from localStorage
-const userole = localStorage.getItem('userRole');
 
 
-function Sidebar() {
-  const [userRole, setUserRole] = useState(userole);
+const Sidebar = () => {
+
+  const [userRole, setUserRole] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isPressed, setIsPressed] = useState(1);
   useEffect(() => {
@@ -35,6 +35,12 @@ function Sidebar() {
 
     // cleanning the listener when resizing the window
     return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+
+  useEffect(() => {
+    const userole = localStorage.getItem('userRole');
+    setUserRole(userole);
   }, []);
   const handleLogout = () => {
     // Clear localStorage
