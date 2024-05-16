@@ -1,6 +1,7 @@
 import { Button, Dialog, DialogActions, DialogContent, FormControlLabel, Radio, RadioGroup, TextField, colors } from '@mui/material';
 import { useState } from 'react'
 import ImagePicker from './imagePicker';
+import Image from 'next/image';
 import React from 'react';
 import axios from 'axios';
 const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -25,6 +26,14 @@ const CreateGuardianAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => 
   const handleClose = () => {
     setOpen(false);
   };
+  ///handle image input
+  const [image, setImage] = useState(null);
+
+  const handleImageChange = (e: any) => {
+    setImage(e.target.files[0]);
+  };
+
+  //send data 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -58,10 +67,23 @@ const CreateGuardianAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => 
         maxWidth='sm'
         fullWidth={true}
       >
-        <DialogContent className=' flex flex-col '>
+        <DialogContent >
 
           <div className='pb-2'>
-            <ImagePicker onImageSelected={handleImageSelected} disabled={false} isGuardianPic={true} />
+            <div className="flex flex-row w-[70%] h-28 items-center justify-center gap-10">
+              <div className="flex flex-col justify-center items-center">
+                <p className="font-sans text-base font-semibold">Drop your image here:</p>
+                <p className="text-blue-600 regular-16">&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; </p>
+              </div>
+              <div className="flex flex-col justify-center items-center h-50 w-50 px-7 py-2 border-2 border-dashed border-blue-600 rounded-full">
+                <Image src="/dropImg.png" height={60} width={60} alt="upload pic" />
+                <p className="regular-14 text-gray-500">
+                  supports:
+                  <br />
+                  jpg, png
+                </p>
+              </div>
+            </div>
           </div>
           <hr className='pb-7' />
           <div className='flex justify-between lg:flex-row items-center flex-col  mb-5 px-8  '>
@@ -104,7 +126,7 @@ const CreateGuardianAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => 
               value={formValues.gender}
               onChange={handleInputChange}
               name="gender"
-              className=' flex flex-row '
+
             >
               <FormControlLabel value="female" control={<Radio />} label="Female" />
               <FormControlLabel value="male" control={<Radio />} label="Male" />

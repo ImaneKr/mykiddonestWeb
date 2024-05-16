@@ -37,5 +37,5 @@
     "tailwindcss": "^3.3.0",
     "typescript": "^5"
   },
-  "proxy": "http://localhost:25298"
+  "proxy": "https://backend-1-dg5f.onrender.com"
 }
