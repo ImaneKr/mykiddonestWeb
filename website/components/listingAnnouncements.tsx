@@ -130,8 +130,8 @@ const ListingAnnouncements: React.FC = () => {
         </div>
       ))}
       <div>
-        <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" className='flex w-full justify-center items-center ' >
-          <DialogContent className='w-full h-full  p-3 '>
+        <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description"  >
+          <DialogContent >
             {selectedIndex != null && (
               <div className='flex flex-col w-full h-full rounded-md border border-dashed border-blue-600 p-3 gap-3'>
                 <ImagePicker isContentPic={true} onImageSelected={setSelectedImagePath} disabled={false} contentPicPath={announcementsList[selectedIndex].imgPath ? announcementsList[selectedIndex].imgPath : '/defaultAnnouncement.jpg'} />
@@ -142,7 +142,7 @@ const ListingAnnouncements: React.FC = () => {
               </div>
             )}
           </DialogContent>
-          <DialogActions className='flex flex-row justify-end pr-1'>
+          <DialogActions >
             <div className='flex flex-row gap-3'>
               <Button onClick={() => setOpen(false)} className='bg-slate-100 text-blue-600 border border-blue-600'>Cancel</Button>
               <Button className='bg-blue-700 text-white px-2 py-0.5 regular-12 mr-4' onClick={handleSubmit}> Save changes </Button>

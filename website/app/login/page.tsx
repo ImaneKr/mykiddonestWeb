@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { BsPerson } from 'react-icons/bs'
 import { HiOutlineLockClosed } from 'react-icons/hi'
 import { Button } from '@mui/material'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import axios from 'axios'
 
 const Page = () => {
