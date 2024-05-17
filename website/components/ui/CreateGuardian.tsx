@@ -160,7 +160,7 @@ const CreateGuardianAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => 
               size='small'
               value={formValues.firstname}
               onChange={handleInputChange}
-              className=' lg:w-56 w-[99%]'
+              className='  w-[99%]'
             />
           </div>
           <div className='flex justify-between items-center lg:flex-row flex-col mb-5 px-8'>
@@ -175,7 +175,7 @@ const CreateGuardianAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => 
               size='small'
               value={formValues.lastname}
               onChange={handleInputChange}
-              className=' lg:w-56 w-[99%]'
+              className='  w-[99%]'
             />
           </div>
           <div className='flex justify-between items-center mb-3 px-8'>
@@ -206,7 +206,7 @@ const CreateGuardianAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => 
               placeholder='username'
               autoFocus
               size='small'
-              className=' lg:w-56 w-[99%]'
+              className='  w-[99%]'
               onChange={handleInputChange}
               value={formValues.username}
             />
@@ -221,7 +221,7 @@ const CreateGuardianAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => 
               placeholder='email'
               autoFocus
               size='small'
-              className=' lg:w-56 w-[99%]'
+              className='  w-[99%]'
               onChange={handleInputChange}
               value={formValues.email}
             />
@@ -236,7 +236,7 @@ const CreateGuardianAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => 
               placeholder='phone number'
               autoFocus
               size='small'
-              className=' lg:w-56 w-[99%]'
+              className='  w-[99%]'
               value={formValues.phone_number}
               onChange={handleInputChange}
 
@@ -252,7 +252,7 @@ const CreateGuardianAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => 
               placeholder='civil state '
               autoFocus
               size='small'
-              className=' lg:w-56 w-[99%]'
+              className='  w-[99%]'
               value={formValues.civilState}
               onChange={handleInputChange}
             />
@@ -267,7 +267,7 @@ const CreateGuardianAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => 
               placeholder='address'
               autoFocus
               size='small'
-              className=' lg:w-56 w-[99%]'
+              className='  w-[99%]'
               value={formValues.address}
               onChange={handleInputChange}
 
@@ -284,7 +284,7 @@ const CreateGuardianAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => 
               placeholder='password'
               autoFocus
               size='small'
-              className=' lg:w-56 w-[99%]'
+              className='  w-[99%]'
               value={formValues.guardian_pwd}
               onChange={handleInputChange}
             />

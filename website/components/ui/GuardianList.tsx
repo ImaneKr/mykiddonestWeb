@@ -147,20 +147,20 @@ const EditUserActionItem: React.FC<EditUserActionItemProps> = ({ row, deleteUser
           <hr className={`m-2.5`} />
           <div className='block justify-center items-center  mb-4 px-8'>
 
-            <TextField type='text' className=' lg:w-56 w-[99%]' name='firstname' size='small' label='Full Name' value={name} onChange={handleInputChange} />
+            <TextField type='text' className=' w-[99%]' name='firstname' size='small' label='Full Name' value={name} onChange={handleInputChange} />
           </div>
 
           <div className='flex   justify-between items-center gap-20 mb-4 px-8'>
-            <TextField size='small' className=' lg:w-56 w-[99%]' name='phone_number' type='text' label='Phone Number' value={formValues.phone_number} onChange={handleInputChange} />
+            <TextField size='small' className=' w-[99%]' name='phone_number' type='text' label='Phone Number' value={formValues.phone_number} onChange={handleInputChange} />
           </div>
           <div className='flex   justify-between  items-center gap-20 mb-4 px-8'>
-            <TextField size='small' className=' lg:w-56 w-[99%]' name='email' type='text' label='Email' value={formValues.email} onChange={handleInputChange} />
+            <TextField size='small' className=' w-[99%]' name='email' type='text' label='Email' value={formValues.email} onChange={handleInputChange} />
           </div>
           <div className='flex   justify-between  items-center gap-20 mb-4 px-8'>
-            <TextField size='small' className=' lg:w-56 w-[99%]' name='username' type='text' label='Username' value={formValues.username} onChange={handleInputChange} />
+            <TextField size='small' className=' w-[99%]' name='username' type='text' label='Username' value={formValues.username} onChange={handleInputChange} />
           </div>
           <div className='flex   justify-between items-center gap-20 mb-4 px-8'>
-            <TextField size='small' className=' lg:w-56 w-[99%]' name='guardian_pwd' type='text' label='Password' value={formValues.guardian_pwd} onChange={handleInputChange} />
+            <TextField size='small' className=' w-[99%]' name='guardian_pwd' type='text' label='Password' value={formValues.guardian_pwd} onChange={handleInputChange} />
 
           </div>
           <div className='flex   justify-between items-center gap-20 mb-4 px-8'>
@@ -177,10 +177,10 @@ const EditUserActionItem: React.FC<EditUserActionItemProps> = ({ row, deleteUser
             </RadioGroup>
           </div>
           <div className='flex   justify-between  items-center gap-20 mb-4 px-8'>
-            <TextField size='small' className=' lg:w-56 w-[99%]' name='civilState' type='text' label='Civil State' value={formValues.civilState} onChange={handleInputChange} />
+            <TextField size='small' className=' w-[99%]' name='civilState' type='text' label='Civil State' value={formValues.civilState} onChange={handleInputChange} />
           </div>
           <div className='flex   justify-between  items-center gap-20 mb-4 px-8'>
-            <TextField type='text' className=' lg:w-56 w-[99%]' name='address' size='small' label='Address' value={formValues.address} onChange={handleInputChange} />
+            <TextField type='text' className=' w-[99%]' name='address' size='small' label='Address' value={formValues.address} onChange={handleInputChange} />
 
           </div>
 

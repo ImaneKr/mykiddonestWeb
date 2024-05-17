@@ -143,13 +143,13 @@ const EditUserActionItem: React.FC<EditUserActionItemProps> = ({ row, deleteUser
           </div>
           <hr className='m-2.5' />
           <div className='block justify-center items-center  mb-4 px-8'>
-            <TextField type='text' className=' lg:w-56 w-[99%]' name='firstname' size='small' label='Full Name' value={formValues.firstname} onChange={handleInputChange} />
+            <TextField type='text' className='  w-[99%]' name='firstname' size='small' label='Full Name' value={formValues.firstname} onChange={handleInputChange} />
           </div>
           <div className='block justify-center items-center  mb-4 px-8'>
-            <TextField type='text' className=' lg:w-56 w-[99%]' name='phone_number' size='small' label='Phone number' value={formValues.phone_number} onChange={handleInputChange} />
+            <TextField type='text' className='  w-[99%]' name='phone_number' size='small' label='Phone number' value={formValues.phone_number} onChange={handleInputChange} />
           </div>
           <div className='block justify-center items-center  mb-4 px-8'>
-            <TextField type='text' className=' lg:w-56 w-[99%]' name='email' size='small' label='Email' value={formValues.email} onChange={handleInputChange} />
+            <TextField type='text' className='  w-[99%]' name='email' size='small' label='Email' value={formValues.email} onChange={handleInputChange} />
           </div>
           <div className='flex   justify-between items-center gap-20 mb-4 px-8'>
             <label className='regular-14 pl-2  pb-1'>Role</label>
@@ -163,10 +163,10 @@ const EditUserActionItem: React.FC<EditUserActionItemProps> = ({ row, deleteUser
             </RadioGroup>
           </div>
           <div className='block justify-center items-center  mb-4 px-8'>
-            <TextField type='text' className=' lg:w-56 w-[99%]' name='username' size='small' label='Username' value={formValues.username} onChange={handleInputChange} />
+            <TextField type='text' className='  w-[99%]' name='username' size='small' label='Username' value={formValues.username} onChange={handleInputChange} />
           </div>
           <div className='block justify-center items-center  mb-4 px-8'>
-            <TextField type='text' className=' lg:w-56 w-[99%]' name='staff_pwd' size='small' label='Passsword' value={formValues.staff_pwd} onChange={handleInputChange} />
+            <TextField type='text' className='  w-[99%]' name='staff_pwd' size='small' label='Passsword' value={formValues.staff_pwd} onChange={handleInputChange} />
           </div>
         </DialogContent>
         <DialogActions  >

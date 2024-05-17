@@ -178,31 +178,31 @@ const EditKidActionItem: React.FC<EditKidActionItemProps> = ({ row, deleteKid, s
           </div>
           <hr className={`m-2.5`} />
           <div className='block justify-center items-center  mb-4 px-8'>
-            <TextField type='text' className=' lg:w-56 w-[99%]' name='firstname' size='small' label='Full Name' value={name} />
+            <TextField type='text' className='  w-[99%]' name='firstname' size='small' label='Full Name' value={name} />
           </div>
           <div className='block justify-center items-center  mb-4 px-8'>
 
-            <TextField type='date' autoFocus className=' lg:w-56 w-[99%]' name='dateOfbirth' size='small' label='Date Of Birth' value={formValues.dateOfbirth} />
+            <TextField type='date' autoFocus className='  w-[99%]' name='dateOfbirth' size='small' label='Date Of Birth' value={formValues.dateOfbirth} />
           </div>
           <div className='block justify-center items-center  mb-4 px-8'>
 
-            <TextField type='text' autoFocus className=' lg:w-56 w-[99%]' name='allergies' size='small' label=' Allergies' value={formValues.allergies} />
+            <TextField type='text' autoFocus className='  w-[99%]' name='allergies' size='small' label=' Allergies' value={formValues.allergies} />
           </div>
           <div className='block justify-center items-center  mb-4 px-8'>
 
-            <TextField type='text' className=' lg:w-56 w-[99%]' name='syndroms' size='small' label='Syndromes' value={formValues.syndroms} />
+            <TextField type='text' className='  w-[99%]' name='syndroms' size='small' label='Syndromes' value={formValues.syndroms} />
           </div>
           <div className='block justify-center items-center  mb-4 px-8'>
 
-            <TextField type='text' className=' lg:w-56 w-[99%]' name='hobbies' size='small' label='Hobbies' value={formValues.hobbies} />
+            <TextField type='text' className='  w-[99%]' name='hobbies' size='small' label='Hobbies' value={formValues.hobbies} />
           </div>
           <div className='block justify-center items-center  mb-4 px-8'>
 
-            <TextField type='text' className=' lg:w-56 w-[99%]' name='relationTochild' size='small' label='Relation To child' value={formValues.relationTochild} />
+            <TextField type='text' className='  w-[99%]' name='relationTochild' size='small' label='Relation To child' value={formValues.relationTochild} />
           </div>
           <div className='block justify-center items-center  mb-4 px-8'>
 
-            <TextField type='text' className=' lg:w-56 w-[99%]' name='authorizedpickups' size='small' label='Authorized Pickups ' value={formValues.authorizedpickups} />
+            <TextField type='text' className='  w-[99%]' name='authorizedpickups' size='small' label='Authorized Pickups ' value={formValues.authorizedpickups} />
           </div>
           <hr className={`m-2.5`} />
           <h1 ref={evaluationRef} id='evaluation' className='pl-5 font-medium pt-4 pb-3'>Kid&apos;s evaluation</h1>
