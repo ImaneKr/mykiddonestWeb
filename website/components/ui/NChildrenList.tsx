@@ -14,12 +14,21 @@ const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 interface Row {
   id: number;
-  prof_pic: string;
+  acc_pic: string;
   name: string;
   age: string;
   guardian: any; // Change from guardian_id to guardian name
   category: any; // Change from category_id to category name
   RegestratedDate: string
+  firstname: string;
+  lastname: string;
+  gender: string;
+  dateOfbirth: string;
+  hobbies: string;
+  allergies: string;
+  authorizedpickups: string;
+  relationTochild: string;
+  syndromes: string
 }
 interface SliderProps {
   initialValue: number;
@@ -70,11 +79,81 @@ const EditKidActionItem: React.FC<EditKidActionItemProps> = ({ row, deleteKid, s
   };
   const [selectedImagePath, setSelectedImagePath] = useState<string>('');
 
-  const [profileInfo, setProfileInfo] = useState({ profilepic: row.prof_pic, name: '', dateOfBirth: '', allergies: '', syndromes: '', hobbies: '', authorizedPicUpPersons: '' });
+  const [profileInfo, setProfileInfo] = useState({ acc_pic: row.acc_pic, name: '', dateOfBirth: '', allergies: '', syndromes: '', hobbies: '', authorizedPicUpPersons: '' });
   const [isChangingAllowed, setIsChangingAllowed] = useState(false);
   const allowChanges = () => {
     setIsChangingAllowed(!isChangingAllowed);
   };
+
+  const [fetchedKid, setFetchedKid] = React.useState<Row | null>(null);
+
+  useEffect(() => {
+    const fetchKidByID = async () => {
+      try {
+        const response = await axios.get(`${backendURL}/kid/${row.id}`);
+        setFetchedKid(response.data);
+      } catch (error) {
+        console.error('Error fetching guardian by ID:', error);
+      }
+    };
+
+    if (open) {
+      fetchKidByID();
+    }
+  }, [open, row.id]);
+
+  const [formValues, setFormValues] = useState({
+    firstname: '', lastname: '', gender: '', hobbies: '', dateOfbirth: '', allergies: '', acc_pic: '', syndroms: '', authorizedpickups: '', relationTochild: ''
+  });
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    console.log("Input changed:", name, value); // Add this line for debugging
+    setFormValues({ ...formValues, [name]: value });
+  };
+
+  //edit submit
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    let Kid_id = row.id
+    try {
+      const response = await axios.put(`${backendURL}/kid/${Kid_id}`, {
+        firstname: formValues.firstname.split(' ')[0], // Split name into first and last name
+        lastname: formValues.firstname.split(' ')[1], // Split name into first and last name
+        dateOfbirth: formValues.dateOfbirth,
+        allergies: formValues.allergies,
+        hobbies: formValues.hobbies,
+        syndromes: formValues.syndroms,
+        authorizedpickups: formValues.authorizedpickups,
+        relationTochild: formValues.relationTochild,
+        acc_pic: selectedImagePath,
+      });
+      console.log('Guardian updated:', response.data);
+      // You can add additional logic here, such as updating the UI or showing a success message
+    } catch (error) {
+      console.error('Error updating guardian:', error);
+      // Handle error, such as displaying an error message to the user
+    }
+    setOpen(false);
+
+  };
+  useEffect(() => {
+    if (fetchedKid) {
+      setFormValues({
+        firstname: fetchedKid.firstname,
+        lastname: fetchedKid.lastname,
+        gender: fetchedKid.gender,
+        hobbies: fetchedKid.hobbies, // Provide default or fetched value for hobbies
+        dateOfbirth: fetchedKid.dateOfbirth, // Provide default or fetched value for dateOfbirth
+        allergies: fetchedKid.allergies, // Provide default or fetched value for allergies
+        acc_pic: fetchedKid.acc_pic,
+        syndroms: fetchedKid.syndromes, // Provide default or fetched value for syndromes
+        authorizedpickups: fetchedKid.authorizedpickups, // Provide default or fetched value for authorizedpickups
+        relationTochild: fetchedKid.relationTochild
+      });
+    }
+  }, [fetchedKid]);
+  let name = `${formValues.firstname} ${formValues.lastname}`
+
 
   return (
     <>
@@ -89,32 +168,41 @@ const EditKidActionItem: React.FC<EditKidActionItemProps> = ({ row, deleteKid, s
         maxWidth='sm'
         fullWidth={true}
       >
-        <DialogContent className=' flex flex-col  w-full '>
+        <DialogContent >
           <div className='flex flex-row justify-between w-full  items-center lg:pr-10 lg:pl-5'>
-            <div className='flex h-30 w-30'><ImagePicker onImageSelected={setSelectedImagePath} disabled={!isChangingAllowed} isProfilePic={true} profilePic={row.prof_pic} /></div>
-            <div className='flex flex-row  justify-between lg:pr-20  items-center'> <p className='text-3xl font-semibold font-sans'>{profileInfo.name}</p>
+            <div className='flex h-30 w-30'><ImagePicker onImageSelected={setSelectedImagePath} disabled={!isChangingAllowed} isProfilePic={true} profilePic={row.acc_pic} /></div>
+            <div className='flex flex-row  justify-between lg:pr-20  items-center'> <p className='text-3xl font-semibold font-sans'>{formValues.firstname} {formValues.lastname}</p>
               <div className='flex flex-row w-full justify-end pl-10'><Button className='flex w-8 h-8 pt-1 text-slate-600' onClick={allowChanges}><FiEdit3 className='w-full h-full ' /></Button>
                 <Button onClick={handleSwipeToEvaluation} className='flex w-8 h-8 pt-1 text-slate-600'><HiOutlineClipboardList className='w-full h-full' /></Button></div>
             </div>
           </div>
           <hr className={`m-2.5`} />
-          <div className='flex justify-between mb-3 px-8'>
-            <GuardianField initialValue={profileInfo.name} label='Full name' disabled={!isChangingAllowed} />
+          <div className='block justify-center items-center  mb-4 px-8'>
+            <TextField type='text' className=' lg:w-56 w-[99%]' name='firstname' size='small' label='Full Name' value={name} />
           </div>
-          <div className='flex justify-between gap-20 mb-3 px-8'>
-            <GuardianField initialValue={profileInfo.dateOfBirth} label='Date of birth' isDate={true} disabled={!isChangingAllowed} />
+          <div className='block justify-center items-center  mb-4 px-8'>
+
+            <TextField type='date' autoFocus className=' lg:w-56 w-[99%]' name='dateOfbirth' size='small' label='Date Of Birth' value={formValues.dateOfbirth} />
           </div>
-          <div className='flex justify-between gap-20 mb-3 px-8'>
-            <GuardianField initialValue={profileInfo.allergies} label='Allergies ' disabled={!isChangingAllowed} />
+          <div className='block justify-center items-center  mb-4 px-8'>
+
+            <TextField type='text' autoFocus className=' lg:w-56 w-[99%]' name='allergies' size='small' label=' Allergies' value={formValues.allergies} />
           </div>
-          <div className='flex justify-between gap-20 mb-3 px-8'>
-            <GuardianField initialValue={profileInfo.syndromes} label='Syndromes' disabled={!isChangingAllowed} />
+          <div className='block justify-center items-center  mb-4 px-8'>
+
+            <TextField type='text' className=' lg:w-56 w-[99%]' name='syndroms' size='small' label='Syndromes' value={formValues.syndroms} />
           </div>
-          <div className='flex justify-between gap-20  px-8'>
-            <GuardianField initialValue={profileInfo.hobbies} label='Hobbies' isPassword={true} disabled={!isChangingAllowed} />
+          <div className='block justify-center items-center  mb-4 px-8'>
+
+            <TextField type='text' className=' lg:w-56 w-[99%]' name='hobbies' size='small' label='Hobbies' value={formValues.hobbies} />
           </div>
-          <div className='flex justify-between gap-20 mb-3 px-8'>
-            <GuardianField initialValue={profileInfo.authorizedPicUpPersons} label='Authorized pick-up persons' disabled={!isChangingAllowed} />
+          <div className='block justify-center items-center  mb-4 px-8'>
+
+            <TextField type='text' className=' lg:w-56 w-[99%]' name='relationTochild' size='small' label='Relation To child' value={formValues.relationTochild} />
+          </div>
+          <div className='block justify-center items-center  mb-4 px-8'>
+
+            <TextField type='text' className=' lg:w-56 w-[99%]' name='authorizedpickups' size='small' label='Authorized Pickups ' value={formValues.authorizedpickups} />
           </div>
           <hr className={`m-2.5`} />
           <h1 ref={evaluationRef} id='evaluation' className='pl-5 font-medium pt-4 pb-3'>Kid&apos;s evaluation</h1>
@@ -125,7 +213,7 @@ const EditKidActionItem: React.FC<EditKidActionItemProps> = ({ row, deleteKid, s
                 <div className='flex flex-row w-full justify-start items-center'>
                   <Slider
 
-                    onChange={(event, newValue) => handleChange(newValue as number, index)}
+                    onChange={() => { }}
                     min={0}
                     max={100}
                     aria-labelledby="continuous-slider"
@@ -137,7 +225,7 @@ const EditKidActionItem: React.FC<EditKidActionItemProps> = ({ row, deleteKid, s
             ))}
           </div>
         </DialogContent>
-        <DialogActions className='flex flex-row justify-between pl-7 pr-3' >
+        <DialogActions >
           <Button className='flex flex-row gap-2 justify-center items-center bg-red-10' onClick={() => {
             setOpen(false);
             deleteKid();
@@ -146,7 +234,7 @@ const EditKidActionItem: React.FC<EditKidActionItemProps> = ({ row, deleteKid, s
             <label className='text-red-90 text-sm'>Delete</label>
           </Button>
           <div className='flex flex-row gap-3'><Button onClick={() => setOpen(false)} className='bg-slate-100 text-blue-600 border border-blue-600'>Cancel</Button>
-            <Button className='bg-blue-700 text-white px-2  regular-12 mr-7'> Save changes </Button></div>
+            <Button className='bg-blue-700 text-white px-2  regular-12 mr-7' onClick={handleSubmit}> Save changes </Button></div>
         </DialogActions>
       </Dialog>
     </>
@@ -157,6 +245,8 @@ const KidList = () => {
   const today = new Date();
   const formattedDate = today.toLocaleDateString('en-GB');
   const [rows, setRows] = React.useState<Row[]>([]);
+
+  /// fetch the guardian name and the category name
   useEffect(() => {
     const fetchGuardianName = async (guardianId: number) => {
       try {
@@ -205,19 +295,22 @@ const KidList = () => {
   }, []);
 
 
-  const deleteUser = React.useCallback(
-    (id: number) => () => {
-      setTimeout(() => {
-        setRows(prevRows => prevRows.filter(row => row.id !== id));
-      });
-    },
-    [],
-  );
+  const deleteUser = async (id: number) => {
+    try {
+      const response = await axios.delete(`${backendURL}/kid/${id}`);
+      console.log('kid deleted:', response.data);
+      // Remove the deleted row from the state
+      setRows(prevRows => prevRows.filter(row => row.id !== id));
+    } catch (error) {
+      console.error('Error deleting kid:', error);
+      // Handle error, such as displaying an error message to the user
+    }
+  }
 
   const columns = React.useMemo<GridColDef<Row>[]>(
     () => [
       {
-        field: 'prof_pic',
+        field: 'acc_pic',
         headerName: '',
         headerClassName: ' hidden justify-center bold-20',
         width: 60,
@@ -240,13 +333,13 @@ const KidList = () => {
         flex: 1,
       },
       {
-        field: 'guardian_name',
+        field: 'guardian',
         headerName: 'Guardian',
         headerClassName: ' justify-center bold-20',
         flex: 1,
       },
       {
-        field: 'category_name',
+        field: 'category',
         headerName: 'Category',
         headerClassName: ' justify-center bold-20',
         flex: 1,
@@ -262,7 +355,7 @@ const KidList = () => {
         type: 'actions',
         headerClassName: '',
         getActions: (params: GridCellParams<Row>) => [
-          <EditKidActionItem key={1} row={params.row} deleteKid={deleteUser(Number(params.id))} scrollToEvaluation={function (): void {
+          <EditKidActionItem key={1} row={params.row} deleteKid={() => deleteUser(Number(params.id))} scrollToEvaluation={function (): void {
             throw new Error('Function not implemented.');
           }} />,
         ]

@@ -13,12 +13,18 @@ const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 // Define the type for row
 interface Row {
   id: number;
-  profile: string;
+  staff_pic: string;
   name: string;
-  phone: string;
+  phone_number: string;
   role: 'sacretary' | 'teacher';
-  rdate: string;
+  email: string;
+  username: string;
+  staff_pwd: string;
+  registration_date: string;
   salary: any;
+  firstname: string;
+  lastname: string;
+
 }
 
 // Define the props for EditUserActionItem
@@ -41,7 +47,80 @@ const EditUserActionItem: React.FC<EditUserActionItemProps> = ({ row, deleteUser
   };
   const [selectedImagePath, setSelectedImagePath] = useState<string>('');
 
-  const [accountInfo, setAccountInfo] = useState({ profilepic: row.profile, name: row.name, phone: row.phone, password: '', email: '' });
+  // fetching the staff 
+  const [fetchedStaff, setFetchedStaff] = React.useState<Row | null>(null);
+
+  useEffect(() => {
+    const fetchStaffByID = async () => {
+      let staff_id = row.id
+      try {
+        const response = await axios.get(`${backendURL}/staff/${staff_id}`);
+        setFetchedStaff(response.data);
+      } catch (error) {
+        console.error('Error fetching staff by ID:', error);
+      }
+    };
+
+    if (open) {
+      fetchStaffByID();
+    }
+  }, [open, row.id]);
+
+  const [formValues, setFormValues] = useState({
+    firstname: '', lastname: '', role: '', email: '', phone_number: '', username: '', staff_pic: '', staff_pwd: '',
+  });
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    console.log("Input changed:", name, value); // Add this line for debugging
+    setFormValues({ ...formValues, [name]: value });
+  };
+
+
+  //edit submit
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    let staff_id = row.id
+    try {
+      const response = await axios.put(`${backendURL}/staff/${staff_id}`, {
+        firstname: formValues.firstname.split(' ')[0], // Split name into first and last name
+        lastname: formValues.firstname.split(' ')[1], // Split name into first and last name
+        role: formValues.role,
+        username: formValues.username,
+        staff_pwd: formValues.staff_pwd,
+        email: formValues.email,
+        phone_number: formValues.phone_number,
+        acc_pic: selectedImagePath,
+      });
+      console.log('staff updated:', response.data);
+      // You can add additional logic here, such as updating the UI or showing a success message
+    } catch (error) {
+      console.error('Error updating staff:', error);
+      // Handle error, such as displaying an error message to the user
+    }
+    setOpen(false);
+
+  };
+  useEffect(() => {
+    if (fetchedStaff) {
+      setFormValues({
+        firstname: fetchedStaff.firstname,
+        lastname: fetchedStaff.lastname,
+        role: fetchedStaff.role,
+        email: fetchedStaff.email,
+        phone_number: fetchedStaff.phone_number,
+        username: fetchedStaff.username,
+        staff_pic: fetchedStaff.staff_pic,
+        staff_pwd: fetchedStaff.staff_pwd,
+      });
+    }
+  }, [fetchedStaff]);
+
+  const [isChangingAllowed, setIsChangingAllowed] = useState(false);
+  const allowChanges = () => {
+    setIsChangingAllowed(!isChangingAllowed);
+  };
+
+  let name = `${formValues.firstname} ${formValues.lastname}`
 
   return (
     <>
@@ -56,117 +135,41 @@ const EditUserActionItem: React.FC<EditUserActionItemProps> = ({ row, deleteUser
         maxWidth='sm'
         fullWidth={true}
       >
-        <DialogContent className=' flex flex-col mb-8'>
+        <DialogContent >
           <div className='flex flex-row justify-between items-center lg:pr-10 lg:pl-5 pr-3'>
-            <div className='flex h-30 w-30'> <ImagePicker onImageSelected={setSelectedImagePath} disabled={false} isProfilePic={true} profilePic={accountInfo.profilepic} /></div>
-            <div className='flex flex-row justify-start lg:gap-10 gap-4 lg:pr-28 items-center'> <p className='text-3xl font-semibold font-sans'>{accountInfo.name}</p>
+            <div className='flex h-30 w-30'> <ImagePicker onImageSelected={setSelectedImagePath} disabled={false} isProfilePic={true} profilePic={formValues.staff_pic} /></div>
+            <div className='flex flex-row justify-start lg:gap-10 gap-4 lg:pr-28 items-center'> <p className='text-3xl font-semibold font-sans'>{name}</p>
             </div>
           </div>
           <hr className='m-2.5' />
-          <div className='flex justify-between lg:flex-row flex-col  mb-5 px-8  '>
-            <p className='lg:regular-18 regular-16'>
-              First Name
-            </p>
-            <TextField
-              type='text'
-              name='first name'
-              placeholder='First Name'
-              autoFocus
-              size='small'
-              //value={accountInfo.name}
-              className=' lg:w-56 w-[99%]'
-            />
+          <div className='block justify-center items-center  mb-4 px-8'>
+            <TextField type='text' className=' lg:w-56 w-[99%]' name='firstname' size='small' label='Full Name' value={formValues.firstname} onChange={handleInputChange} />
           </div>
-          <div className='flex justify-between lg:flex-row flex-col mb-5 px-8'>
-            <p className='lg:regular-18 regular-16'>
-              Last Name
-            </p>
-            <TextField
-              type='text'
-              name='last name'
-              placeholder='Last Name'
-              autoFocus
-              size='small'
-              //value={accountInfo.name}
-              className=' lg:w-56 w-[99%]'
-            />
+          <div className='block justify-center items-center  mb-4 px-8'>
+            <TextField type='text' className=' lg:w-56 w-[99%]' name='phone_number' size='small' label='Phone number' value={formValues.phone_number} onChange={handleInputChange} />
           </div>
-
-          <div className='flex justify-between  lg:flex-row flex-col mb-3 px-8'>
-            <p className='lg:regular-18 regular-16'>
-              Role
-            </p>
+          <div className='block justify-center items-center  mb-4 px-8'>
+            <TextField type='text' className=' lg:w-56 w-[99%]' name='email' size='small' label='Email' value={formValues.email} onChange={handleInputChange} />
+          </div>
+          <div className='flex   justify-between items-center gap-20 mb-4 px-8'>
+            <label className='regular-14 pl-2  pb-1'>Role</label>
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
-              defaultValue="Teacher"
-              name="radio-buttons-group"
-              className=' flex flex-row justify-between'
-            >
-              <FormControlLabel value="Secretry" control={<Radio />} label="Sacretary" />
-              <FormControlLabel value="Teacher" control={<Radio />} label="Teacher" />
+              value={formValues.role}
+              name="role">
+              <FormControlLabel value="secretary" control={<Radio />} label="Sacretary" />
+              <FormControlLabel value="teacher" control={<Radio />} label="Teacher" />
+
             </RadioGroup>
-
           </div>
-
-          <div className='flex lg:flex-row flex-col  justify-between lg:gap-20 mb-5 px-8'>
-            <p className='lg:regular-18 regular-16'>
-              Username
-            </p>
-            <TextField
-              type='text'
-              name='username'
-              placeholder='username'
-              autoFocus
-              size='small'
-              className=' lg:w-56 w-[99%]'
-
-            />
+          <div className='block justify-center items-center  mb-4 px-8'>
+            <TextField type='text' className=' lg:w-56 w-[99%]' name='username' size='small' label='Username' value={formValues.username} onChange={handleInputChange} />
           </div>
-          <div className='flex  lg:flex-row flex-col justify-between lg:gap-20 mb-5 px-8'>
-            <p className='lg:regular-18 regular-16'>
-              Email Address
-            </p>
-            <TextField
-              type='email'
-              name='email'
-              placeholder='email'
-              autoFocus
-              size='small'
-              className=' lg:w-56 w-[99%]'
-
-            />
-          </div>
-          <div className='flex  lg:flex-row flex-col justify-between lg:gap-20 mb-5 px-8'>
-            <p className='lg:regular-18 regular-16'>
-              Phone Number
-            </p>
-            <TextField
-              type='text '
-              name='phoneNumber'
-              placeholder='Phone Number'
-              autoFocus
-              size='small'
-              className=' lg:w-56 w-[99%]'
-
-            />
-          </div>
-          <div className='flex lg:flex-row flex-col  justify-between lg:gap-20 mb-5  px-8'>
-            <p className='lg:regular-18 regular-16'>
-              Password
-            </p>
-            <TextField
-              type='password'
-              name='password'
-              placeholder='password'
-              autoFocus
-              size='small'
-              className=' lg:w-56 w-[99%]'
-
-            //value={accountInfo.hobbies}
-            />
+          <div className='block justify-center items-center  mb-4 px-8'>
+            <TextField type='text' className=' lg:w-56 w-[99%]' name='staff_pwd' size='small' label='Passsword' value={formValues.staff_pwd} onChange={handleInputChange} />
           </div>
         </DialogContent>
-        <DialogActions className='flex flex-row justify-between pl-7 pr-3' >
+        <DialogActions  >
           <Button className='flex flex-row gap-2 justify-center items-center bg-red-10' onClick={() => {
             setOpen(false);
             deleteUser();
@@ -174,8 +177,9 @@ const EditUserActionItem: React.FC<EditUserActionItemProps> = ({ row, deleteUser
             <RiDeleteBin6Line className='text-red-90 m-1' />
             <label className='text-red-90 text-sm'>Delete</label>
           </Button>
-          <div className='flex flex-row gap-3'><Button onClick={() => setOpen(false)} className='bg-slate-100 text-blue-600 border border-blue-600'>Cancel</Button>
-            <Button className='bg-blue-700 text-white px-2  regular-12 mr-7'> Save changes </Button></div>
+          <div className='flex flex-row gap-3'>
+            <Button onClick={() => setOpen(false)} className='bg-slate-100 text-blue-600 border border-blue-600'>Cancel</Button>
+            <Button onClick={handleSubmit} className='bg-blue-700 text-white px-2  regular-12 mr-7' > Save changes </Button></div>
         </DialogActions>
       </Dialog>
     </>
@@ -204,7 +208,7 @@ const StaffList = () => {
         }));
         setRows(updatedRows);
       } catch (error) {
-        console.error('Error fetching guardians:', error);
+        console.error('Error fetching staffs:', error);
       }
     };
 
@@ -213,14 +217,18 @@ const StaffList = () => {
   }, []);
   const [rows, setRows] = React.useState<Row[]>([]);
 
-  const deleteUser = React.useCallback(
-    (id: number) => () => {
-      setTimeout(() => {
-        setRows(prevRows => prevRows.filter(row => row.id !== id));
-      });
-    },
-    [],
-  );
+  const deleteUser = async (id: number) => {
+
+    try {
+      const response = await axios.delete(`${backendURL}/staff/${id}`);
+      console.log('staff deleted:', response.data);
+      // Remove the deleted row from the state
+      setRows(prevRows => prevRows.filter(row => row.id !== id));
+    } catch (error) {
+      console.error('Error deleting staff:', error);
+      // Handle error, such as displaying an error message to the user
+    }
+  }
 
   const columns = React.useMemo<GridColDef<Row>[]>(
     () => [
@@ -279,7 +287,7 @@ const StaffList = () => {
         type: 'actions',
         headerClassName: '',
         getActions: (params: GridCellParams<Row>) => [
-          <EditUserActionItem key={1} row={params.row} deleteUser={deleteUser(Number(params.id))} />,
+          <EditUserActionItem key={1} row={params.row} deleteUser={() => deleteUser(Number(params.id))} />,
         ]
       }
     ],

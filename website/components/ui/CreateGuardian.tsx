@@ -1,5 +1,5 @@
 import { Button, Dialog, DialogActions, DialogContent, FormControlLabel, Radio, RadioGroup, TextField, colors } from '@mui/material';
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import ImagePicker from './imagePicker';
 import Image from 'next/image';
 import React from 'react';
@@ -10,6 +10,19 @@ interface FormDialogProps {
   open: boolean;
   setOpen: (value: boolean) => void;
 }
+function dataURLtoFile(dataurl: string, filename: string): File {
+  const arr = dataurl.split(',');
+  const mime = arr[0].match(/:(.*?);/)![1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new File([u8arr], filename, { type: mime });
+}
+
+
 const CreateGuardianAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => {
 
 
@@ -27,10 +40,23 @@ const CreateGuardianAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => 
     setOpen(false);
   };
   ///handle image input
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState<string>('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleImageChange = (e: any) => {
-    setImage(e.target.files[0]);
+  const handleButtonClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      let img = e.target.files[0];
+      console.log(image);
+      const imageUrl = URL.createObjectURL(img);
+      setImage(imageUrl)
+    }
+
   };
 
   //send data 
@@ -38,7 +64,19 @@ const CreateGuardianAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => 
     e.preventDefault();
 
     try {
-      const response = await axios.post(`${backendURL}/guardian`, formValues);
+      // Create form data
+      const formData = new FormData();
+      // Append form values
+      Object.entries(formValues).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
+      // Append image file
+      if (image) {
+        formData.append('acc_pic', dataURLtoFile(image, 'profile.jpg'));
+      }
+      const response = await axios.post(`${backendURL}/guardian`, formData
+
+      );
       console.log(response.data);
       setOpen(false); // Close dialog after successful submission
     } catch (error: any) {
@@ -70,20 +108,44 @@ const CreateGuardianAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => 
         <DialogContent >
 
           <div className='pb-2'>
-            <div className="flex flex-row w-[70%] h-28 items-center justify-center gap-10">
-              <div className="flex flex-col justify-center items-center">
-                <p className="font-sans text-base font-semibold">Drop your image here:</p>
-                <p className="text-blue-600 regular-16">&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; </p>
-              </div>
-              <div className="flex flex-col justify-center items-center h-50 w-50 px-7 py-2 border-2 border-dashed border-blue-600 rounded-full">
-                <Image src="/dropImg.png" height={60} width={60} alt="upload pic" />
-                <p className="regular-14 text-gray-500">
-                  supports:
-                  <br />
-                  jpg, png
-                </p>
-              </div>
-            </div>
+
+            <label className="flex flex-col justify-center items-center w-full p-6" htmlFor="fileInput">
+              {!image && (
+                <div className="flex flex-row w-[70%] h-28 items-center justify-center gap-10">
+                  <div className="flex flex-col justify-center items-center">
+                    <p className="font-sans text-base font-semibold">Drop your image here:</p>
+                    <p className="text-blue-600 regular-16">&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; </p>
+                  </div>
+                  <div className="flex flex-col justify-center items-center h-50 w-50 px-7 py-2 border-2 border-dashed border-blue-600 rounded-full">
+                    <Image src="/dropImg.png" height={60} width={60} alt="upload pic" />
+                    <p className="regular-14 text-gray-500">
+                      supports:
+                      <br />
+                      jpg, png
+                    </p>
+                  </div>
+                </div>
+              )}
+              {image && (
+                <Image
+                  src={image}
+                  alt={"profile"}
+                  width={110}
+                  height={110}
+                  className="rounded-full border-2 border-gray-300 p-1"
+                />
+              )}
+            </label>
+            <input
+              id="fileInput"
+              type="file"
+              accept="image/*"
+              style={{ display: "none" }}
+              ref={fileInputRef}
+              onChange={handleImageChange}
+            />
+
+
           </div>
           <hr className='pb-7' />
           <div className='flex justify-between lg:flex-row items-center flex-col  mb-5 px-8  '>
