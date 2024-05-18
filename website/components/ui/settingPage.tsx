@@ -8,7 +8,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation'
 const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-const settingPage = () => {
+const SettingPage = () => {
 
     const router = useRouter();
 
@@ -172,4 +172,4 @@ const handleSubmit = async (e: React.FormEvent) => {
     )
 }
 
-export default settingPage
+export default SettingPage
