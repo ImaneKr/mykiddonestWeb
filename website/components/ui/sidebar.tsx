@@ -9,6 +9,7 @@ import { AiOutlineCalendar } from "react-icons/ai";
 import { RiDashboardLine } from "react-icons/ri";
 import { RiParentLine } from "react-icons/ri";
 import { GoSignOut } from "react-icons/go";
+import { useRouter } from 'next/navigation'
 import Link from "next/link";
 import Image from "next/image";
 // Retrieve the user's role from localStorage
@@ -19,6 +20,8 @@ const Sidebar = () => {
   const [userRole, setUserRole] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isPressed, setIsPressed] = useState(1);
+  const router = useRouter();
+
   useEffect(() => {
     // Fonction toverufy the screen size
     const handleResize = () => {
@@ -43,11 +46,10 @@ const Sidebar = () => {
     setUserRole(userole);
   }, []);
   const handleLogout = () => {
-    // Clear localStorage
+
     localStorage.clear();
-    // Redirect the user to the login page or any other appropriate action
-    // For example:
-    // router.push('/login');
+
+    router.push('/login');
   };
 
   return (
@@ -118,7 +120,7 @@ const Sidebar = () => {
                         Content
                       </Link>
                     </button>)}
-                    {(userRole === 'admin' || userRole === 'secretary') && (<button className=" w-full flex  gap-4 justify-start items-center  px-4   " onClick={() => setIsPressed(8)}>
+                    {userRole === 'secretary' && (<button className=" w-full flex  gap-4 justify-start items-center  px-4   " onClick={() => setIsPressed(8)}>
                       <Link href='/dashboard/menu' className={`flex flex-row w-full h-full gap-4  rounded-md  p-2  group  regular-14  text-gray-800  font-semibold ${isPressed == 8 ? 'bg-blue-500 text-white' : ''}`}>
                         <BiRestaurant className="text-xl text-gray-icon  " />
                         Lunch Menu
@@ -130,11 +132,11 @@ const Sidebar = () => {
                         Settings
                       </Link>
                     </button>
-                    <button className=" w-full flex  gap-4 justify-start items-center  px-4   " onClick={() => setIsPressed(10)}>
-                      <Link href='/login' onClick={handleLogout} className={`flex flex-row w-full h-full gap-4  rounded-md  p-2  group  regular-14  text-gray-800  font-semibold ${isPressed == 10 ? 'bg-blue-500 text-white' : ''}`}>
+                    <button className=" w-full flex  gap-4 justify-start items-center  px-4  cursor-pointer " onClick={() => setIsPressed(10)}>
+                      <label onClick={handleLogout} className={`flex flex-row w-full h-full gap-4  rounded-md cursor-pointer  p-2  group  regular-14  text-gray-800  font-semibold ${isPressed == 10 ? 'bg-blue-500 text-white' : ''}`}>
                         <GoSignOut className="text-xl text-gray-icon  " />
                         Log out
-                      </Link>
+                      </label>
                     </button>
                   </div></div>
                 <div className="justify-center items-center ">

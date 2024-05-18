@@ -1,12 +1,13 @@
-import { Button, Dialog, DialogActions, DialogContent, FormControlLabel, Radio, RadioGroup, TextField, colors } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, FormControlLabel, IconButton, Radio, RadioGroup, TextField, colors } from '@mui/material';
 import { DataGrid, GridActionsCellItem, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import React, { useEffect, useState } from 'react';
 import { FiEdit3 } from 'react-icons/fi';
 import Image from 'next/image';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import ImagePicker from './imagePicker';
+import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
 import { profile } from 'console';
-import StaffField from '../staffField';
+
 import axios from 'axios';
 const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -89,7 +90,7 @@ const EditUserActionItem: React.FC<EditUserActionItemProps> = ({ row, deleteUser
         staff_pwd: formValues.staff_pwd,
         email: formValues.email,
         phone_number: formValues.phone_number,
-        acc_pic: selectedImagePath,
+        staff_pic: selectedImagePath,
       });
       console.log('staff updated:', response.data);
       // You can add additional logic here, such as updating the UI or showing a success message
@@ -122,6 +123,13 @@ const EditUserActionItem: React.FC<EditUserActionItemProps> = ({ row, deleteUser
 
   let name = `${formValues.firstname} ${formValues.lastname}`
 
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  }
+
   return (
     <>
       <Button onClick={handleEdit}>
@@ -146,10 +154,16 @@ const EditUserActionItem: React.FC<EditUserActionItemProps> = ({ row, deleteUser
             <TextField type='text' className='  w-[99%]' name='firstname' size='small' label='Full Name' value={formValues.firstname} onChange={handleInputChange} />
           </div>
           <div className='block justify-center items-center  mb-4 px-8'>
-            <TextField type='text' className='  w-[99%]' name='phone_number' size='small' label='Phone number' value={formValues.phone_number} onChange={handleInputChange} />
+            <TextField  className='  w-[99%]' name='phone_number' size='small' label='Phone number' value={formValues.phone_number} onChange={handleInputChange}
+            inputProps={{
+              pattern: '^\\+213(7|5|6)[0-9]{8}$', // Regular expression pattern for Algerian phone number
+              title: 'Please enter a valid Algerian phone number (e.g., +213xxxxxxxxx)', // Error message
+            }}
+            error={!formValues.phone_number.match(/^\+213(7|5|6)[0-9]{8}$/)}
+           />
           </div>
           <div className='block justify-center items-center  mb-4 px-8'>
-            <TextField type='text' className='  w-[99%]' name='email' size='small' label='Email' value={formValues.email} onChange={handleInputChange} />
+            <TextField type='email' className='  w-[99%]' name='email' size='small' label='Email' value={formValues.email} onChange={handleInputChange} />
           </div>
           <div className='flex   justify-between items-center gap-20 mb-4 px-8'>
             <label className='regular-14 pl-2  pb-1'>Role</label>
@@ -166,7 +180,14 @@ const EditUserActionItem: React.FC<EditUserActionItemProps> = ({ row, deleteUser
             <TextField type='text' className='  w-[99%]' name='username' size='small' label='Username' value={formValues.username} onChange={handleInputChange} />
           </div>
           <div className='block justify-center items-center  mb-4 px-8'>
-            <TextField type='text' className='  w-[99%]' name='staff_pwd' size='small' label='Passsword' value={formValues.staff_pwd} onChange={handleInputChange} />
+            <TextField type={showPassword ? 'text' : 'password'} className='  w-[99%]' name='staff_pwd' size='small' label='Passsword' value={formValues.staff_pwd} onChange={handleInputChange}
+              InputProps={{
+                endAdornment: (
+                  <IconButton onClick={handleTogglePasswordVisibility} edge="end">
+                    {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
+                  </IconButton>
+                ),
+              }} />
           </div>
         </DialogContent>
         <DialogActions  >

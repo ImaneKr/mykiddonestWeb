@@ -5,8 +5,7 @@ import { FiEdit3 } from 'react-icons/fi';
 import Image from 'next/image';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import ImagePicker from './imagePicker';
-import { profile } from 'console';
-import GuardianField from '../guardianField';
+import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
 import axios from 'axios';
 const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -123,6 +122,12 @@ const EditUserActionItem: React.FC<EditUserActionItemProps> = ({ row, deleteUser
   };
 
   let name = `${formValues.firstname} ${formValues.lastname}`
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  }
   return (
     <>
       <IconButton onClick={handleEdit}>
@@ -151,16 +156,29 @@ const EditUserActionItem: React.FC<EditUserActionItemProps> = ({ row, deleteUser
           </div>
 
           <div className='flex   justify-between items-center gap-20 mb-4 px-8'>
-            <TextField size='small' className=' w-[99%]' name='phone_number' type='text' label='Phone Number' value={formValues.phone_number} onChange={handleInputChange} />
+            <TextField size='small' className=' w-[99%]' name='phone_number' type='text' label='Phone Number' value={formValues.phone_number} onChange={handleInputChange}
+              inputProps={{
+                pattern: '^\\+213(7|5|6)[0-9]{8}$', // Regular expression pattern for Algerian phone number
+                title: 'Please enter a valid Algerian phone number (e.g., +213xxxxxxxxx)', // Error message
+              }}
+              error={!formValues.phone_number.match(/^\+213(7|5|6)[0-9]{8}$/)}
+            />
           </div>
           <div className='flex   justify-between  items-center gap-20 mb-4 px-8'>
-            <TextField size='small' className=' w-[99%]' name='email' type='text' label='Email' value={formValues.email} onChange={handleInputChange} />
+            <TextField size='small' className=' w-[99%]' name='email' type='email' label='Email' value={formValues.email} onChange={handleInputChange} />
           </div>
           <div className='flex   justify-between  items-center gap-20 mb-4 px-8'>
             <TextField size='small' className=' w-[99%]' name='username' type='text' label='Username' value={formValues.username} onChange={handleInputChange} />
           </div>
           <div className='flex   justify-between items-center gap-20 mb-4 px-8'>
-            <TextField size='small' className=' w-[99%]' name='guardian_pwd' type='text' label='Password' value={formValues.guardian_pwd} onChange={handleInputChange} />
+            <TextField size='small' className=' w-[99%]' name='guardian_pwd' type={showPassword ? 'text' : 'password'} label='Password' value={formValues.guardian_pwd} onChange={handleInputChange}
+              InputProps={{
+                endAdornment: (
+                  <IconButton onClick={handleTogglePasswordVisibility} edge="end">
+                    {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
+                  </IconButton>
+                ),
+              }} />
 
           </div>
           <div className='flex   justify-between items-center gap-20 mb-4 px-8'>

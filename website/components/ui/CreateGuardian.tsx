@@ -1,9 +1,11 @@
-import { Button, Dialog, DialogActions, DialogContent, FormControlLabel, Radio, RadioGroup, TextField, colors } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, FormControlLabel, IconButton, Radio, RadioGroup, TextField, colors } from '@mui/material';
 import { useRef, useState } from 'react'
 import ImagePicker from './imagePicker';
 import Image from 'next/image';
 import React from 'react';
 import axios from 'axios';
+import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
+
 const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 interface FormDialogProps {
@@ -90,6 +92,14 @@ const CreateGuardianAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => 
   const handleImageSelected = (selectedImagePath: string) => {
     setFormValues({ ...formValues, acc_pic: selectedImagePath });
   };
+
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  }
+
   return (
     <React.Fragment>
       <button className='inline-block px-2 py-1 text-white bg-blue-90 rounded-md '
@@ -231,7 +241,7 @@ const CreateGuardianAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => 
               Phone Number
             </p>
             <TextField
-              type='text'
+
               name='phone_number'
               placeholder='phone number'
               autoFocus
@@ -239,7 +249,11 @@ const CreateGuardianAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => 
               className='  w-[99%]'
               value={formValues.phone_number}
               onChange={handleInputChange}
-
+              inputProps={{
+                pattern: '^\\+213(7|5|6)[0-9]{8}$', // Regular expression pattern for Algerian phone number
+                title: 'Please enter a valid Algerian phone number (e.g., +213xxxxxxxxx)', // Error message
+              }}
+              error={!formValues.phone_number.match(/^\+213(7|5|6)[0-9]{8}$/)}
             />
           </div>
           <div className='flex  lg:flex-row flex-col justify-between items-center lg:gap-20 mb-5 px-8'>
@@ -279,7 +293,7 @@ const CreateGuardianAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => 
               Password
             </p>
             <TextField
-              type='password'
+              type={showPassword ? 'text' : 'password'}
               name='guardian_pwd'
               placeholder='password'
               autoFocus
@@ -287,6 +301,13 @@ const CreateGuardianAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => 
               className='  w-[99%]'
               value={formValues.guardian_pwd}
               onChange={handleInputChange}
+              InputProps={{
+                endAdornment: (
+                  <IconButton onClick={handleTogglePasswordVisibility} edge="end">
+                    {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
+                  </IconButton>
+                ),
+              }}
             />
           </div>
 

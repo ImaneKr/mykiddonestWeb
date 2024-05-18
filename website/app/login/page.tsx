@@ -23,8 +23,11 @@ const Page = () => {
             });
             console.log(response.data)
             const Role = response.data.staff.role
+            console.log(response.data.staff.staff_id)
+
             // Retrieve the user's role from localStorage
             localStorage.setItem('userRole', response.data.staff.role);
+            localStorage.setItem('userID', response.data.staff.staff_id);
 
             // If login is successful, redirect to dashboard
             if (response.data.token) {
@@ -70,7 +73,7 @@ const Page = () => {
                             onChange={(e) => setPassword(e.target.value)}
                             className='border-2 p-3 pl-8 rounded-2xl group focus:outline-none focus:border-orange-300'
                         />
-                        <HiOutlineLockClosed className='absolute left-1 bottom-1  translate-x-1.5 -translate-y-3 w-auto h-auto' style={{ color: '#BBBBBB' }} />
+                        <HiOutlineLockClosed className='absolute left-1  translate-x-1.5 bottom-36 w-auto h-auto' style={{ color: '#BBBBBB' }} />
                         {loginError && <p className="text-red-500">{loginError}</p>}
                         <div className='flex flex-row justify-end w-full lg:pr-10 pb-5 pr-24'>
                             <Button className='bg-white group focus:bg-white text-black regular-12 normal-case'>Forget password?</Button>

@@ -1,8 +1,9 @@
-import { Button, Dialog, DialogActions, DialogContent, FormControlLabel, Radio, RadioGroup, TextField, colors } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, FormControlLabel, IconButton, Radio, RadioGroup, TextField, colors } from '@mui/material';
 import { useState } from 'react'
 import ImagePicker from './imagePicker';
 import React from 'react';
 import axios from 'axios';
+import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
 
 const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -39,7 +40,11 @@ const CreateStaffAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => {
   };
 
   const [selectedImagePath, setSelectedImagePath] = useState<string>('');
+  const [showPassword, setShowPassword] = useState(false);
 
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  }
   return (
     <React.Fragment>
       <button className='inline-block px-2 py-1 text-white bg-blue-90 rounded-md '
@@ -73,7 +78,7 @@ const CreateStaffAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => {
               size='small'
               value={formValues.firstname}
               onChange={handleInputChange}
-              className=' lg:w-56 w-[99%]'
+              className='  w-[99%]'
             />
           </div>
           <div className='flex justify-between lg:flex-row flex-col mb-3 px-8'>
@@ -88,7 +93,7 @@ const CreateStaffAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => {
               size='small'
               value={formValues.lastname}
               onChange={handleInputChange}
-              className=' lg:w-56 w-[99%]'
+              className='  w-[99%]'
             />
           </div>
 
@@ -122,7 +127,7 @@ const CreateStaffAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => {
               placeholder='username'
               autoFocus
               size='small'
-              className=' lg:w-56 w-[99%]'
+              className='  w-[99%]'
               value={formValues.username}
               onChange={handleInputChange}
 
@@ -138,7 +143,7 @@ const CreateStaffAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => {
               helperText
               autoFocus
               size='small'
-              className=' lg:w-56 w-[99%]'
+              className='  w-[99%]'
               value={formValues.email}
               onChange={handleInputChange}
 
@@ -154,9 +159,14 @@ const CreateStaffAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => {
               helperText
               autoFocus
               size='small'
-              className=' lg:w-56 w-[99%]'
+              className='  w-[99%]'
               value={formValues.phone_number}
               onChange={handleInputChange}
+              inputProps={{
+                pattern: '^\\+213(7|5|6)[0-9]{8}$', // Regular expression pattern for Algerian phone number
+                title: 'Please enter a valid Algerian phone number (e.g., +213xxxxxxxxx)', // Error message
+              }}
+              error={!formValues.phone_number.match(/^\+213(7|5|6)[0-9]{8}$/)}
 
             />
           </div>
@@ -165,14 +175,20 @@ const CreateStaffAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => {
               Password
             </p>
             <TextField
-              type='password'
+              type={showPassword ? 'text' : 'password'}
               name='staff_pwd'
               autoFocus
               size='small'
-              className=' lg:w-56 w-[99%]'
+              className='  w-[99%]'
               value={formValues.staff_pwd}
               onChange={handleInputChange}
-
+              InputProps={{
+                endAdornment: (
+                  <IconButton onClick={handleTogglePasswordVisibility} edge="end">
+                    {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
+                  </IconButton>
+                ),
+              }}
             />
           </div>
 

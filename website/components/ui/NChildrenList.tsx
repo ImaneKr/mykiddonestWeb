@@ -5,10 +5,9 @@ import { FiEdit3 } from 'react-icons/fi';
 import Image from 'next/image';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import ImagePicker from './imagePicker';
-import GuardianField from '../guardianField';
-import SliderComponent from './slider';
 import { HiOutlineClipboardList } from 'react-icons/hi';
 import axios from 'axios';
+import Evaluation from './evaluation';
 const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 
@@ -54,21 +53,15 @@ const EditKidActionItem: React.FC<EditKidActionItemProps> = ({ row, deleteKid, s
   const [value, setValue] = useState<number>(0);
 
 
-  const colors: string[] = ['text-orange-400', 'text-blue-400', 'text-green-90'];
   const [open, setOpen] = React.useState(false);
-  const subjectsAndPercentages: { subject: string; percentage: number }[] = [
-    { subject: 'Math', percentage: 85 },
-    { subject: 'Science', percentage: 90 },
-    { subject: 'History', percentage: 75 },
-    // Add more subjects and percentages as needed
-  ];
-  const [percentages, setPercentages] = useState<number[]>(subjectsAndPercentages.map(item => item.percentage));
-  const handleChange = (newValue: number, index: number) => {
-    console.log(newValue)
-    const newPercentages = [...percentages]; // Create a copy of the percentages array
-    newPercentages[index] = newValue; // Update the percentage for the corresponding subject
-    setPercentages(newPercentages); // Update the state with the new percentages
-  };
+
+
+  ///evaluationnn
+
+
+
+  //ediiiit kid profile
+
   const handleEdit = () => {
     setOpen(true);
     // You can also pass 'row' to your dialog form here.
@@ -116,7 +109,7 @@ const EditKidActionItem: React.FC<EditKidActionItemProps> = ({ row, deleteKid, s
     e.preventDefault();
     let Kid_id = row.id
     try {
-      const response = await axios.put(`${backendURL}/kid/${Kid_id}`, {
+      /*const response = await axios.put(`${backendURL}/kid/${Kid_id}`, {
         firstname: formValues.firstname.split(' ')[0], // Split name into first and last name
         lastname: formValues.firstname.split(' ')[1], // Split name into first and last name
         dateOfbirth: formValues.dateOfbirth,
@@ -126,8 +119,8 @@ const EditKidActionItem: React.FC<EditKidActionItemProps> = ({ row, deleteKid, s
         authorizedpickups: formValues.authorizedpickups,
         relationTochild: formValues.relationTochild,
         acc_pic: selectedImagePath,
-      });
-      console.log('Guardian updated:', response.data);
+      });*/
+      //console.log('Guardian updated:', response.data);
       // You can add additional logic here, such as updating the UI or showing a success message
     } catch (error) {
       console.error('Error updating guardian:', error);
@@ -171,70 +164,54 @@ const EditKidActionItem: React.FC<EditKidActionItemProps> = ({ row, deleteKid, s
         <DialogContent >
           <div className='flex flex-row justify-between w-full  items-center lg:pr-10 lg:pl-5'>
             <div className='flex h-30 w-30'><ImagePicker onImageSelected={setSelectedImagePath} disabled={!isChangingAllowed} isProfilePic={true} profilePic={row.acc_pic} /></div>
-            <div className='flex flex-row  justify-between lg:pr-20  items-center'> <p className='text-3xl font-semibold font-sans'>{formValues.firstname} {formValues.lastname}</p>
-              <div className='flex flex-row w-full justify-end pl-10'><Button className='flex w-8 h-8 pt-1 text-slate-600' onClick={allowChanges}><FiEdit3 className='w-full h-full ' /></Button>
-                <Button onClick={handleSwipeToEvaluation} className='flex w-8 h-8 pt-1 text-slate-600'><HiOutlineClipboardList className='w-full h-full' /></Button></div>
+            <div className='flex flex-row  justify-between lg:pr-20  items-center'> <p className='text- disabled3xl font-semibold font-sans'>{formValues.firstname} {formValues.lastname}</p>
+              <div className='flex flex-row w-full justify-end pl-10'>
+                <Button onClick={handleSwipeToEvaluation} className='flex w-8 h-8 pt-1 text- disabledslate-600'><HiOutlineClipboardList className='w-full h-full' /></Button></div>
             </div>
           </div>
           <hr className={`m-2.5`} />
           <div className='block justify-center items-center  mb-4 px-8'>
-            <TextField type='text' className='  w-[99%]' name='firstname' size='small' label='Full Name' value={name} />
+            <TextField type='text' disabled className='  w-[99%]' name='firstname' size='small' label='Full Name' value={name} />
           </div>
           <div className='block justify-center items-center  mb-4 px-8'>
 
-            <TextField type='date' autoFocus className='  w-[99%]' name='dateOfbirth' size='small' label='Date Of Birth' value={formValues.dateOfbirth} />
+            <TextField type='date' disabled className='  w-[99%]' name='dateOfbirth' size='small' label='Date Of Birth' value={formValues.dateOfbirth} />
           </div>
           <div className='block justify-center items-center  mb-4 px-8'>
 
-            <TextField type='text' autoFocus className='  w-[99%]' name='allergies' size='small' label=' Allergies' value={formValues.allergies} />
+            <TextField type='text' disabled autoFocus className='  w-[99%]' name='allergies' size='small' label=' Allergies' value={formValues.allergies} />
           </div>
           <div className='block justify-center items-center  mb-4 px-8'>
 
-            <TextField type='text' className='  w-[99%]' name='syndroms' size='small' label='Syndromes' value={formValues.syndroms} />
+            <TextField type='text' disabled className='  w-[99%]' name='syndroms' size='small' label='Syndromes' value={formValues.syndroms} />
           </div>
           <div className='block justify-center items-center  mb-4 px-8'>
 
-            <TextField type='text' className='  w-[99%]' name='hobbies' size='small' label='Hobbies' value={formValues.hobbies} />
+            <TextField type='text' disabled className='  w-[99%]' name='hobbies' size='small' label='Hobbies' value={formValues.hobbies} />
           </div>
           <div className='block justify-center items-center  mb-4 px-8'>
 
-            <TextField type='text' className='  w-[99%]' name='relationTochild' size='small' label='Relation To child' value={formValues.relationTochild} />
+            <TextField type='text' disabled className='  w-[99%]' name='relationTochild' size='small' label='Relation To child' value={formValues.relationTochild} />
           </div>
           <div className='block justify-center items-center  mb-4 px-8'>
 
-            <TextField type='text' className='  w-[99%]' name='authorizedpickups' size='small' label='Authorized Pickups ' value={formValues.authorizedpickups} />
+            <TextField type='text' disabled className='  w-[99%]' name='authorizedpickups' size='small' label='Authorized Pickups ' value={formValues.authorizedpickups} />
           </div>
           <hr className={`m-2.5`} />
-          <h1 ref={evaluationRef} id='evaluation' className='pl-5 font-medium pt-4 pb-3'>Kid&apos;s evaluation</h1>
-          <div className='flex flex-col w-full h-full pb-8 items-center justify-center pl-14 gap-3 mt-3'>
-            {subjectsAndPercentages.map(({ subject, percentage }, index) => (
-              <div key={index} className='flex flex-row w-full justify-between items-center'>
-                <h3 className='flex w-1/3'>{subject}</h3>
-                <div className='flex flex-row w-full justify-start items-center'>
-                  <Slider
 
-                    onChange={() => { }}
-                    min={0}
-                    max={100}
-                    aria-labelledby="continuous-slider"
-                    className={colors[index]}
-                  />
-                  <h1 className={colors[index % 3]}>{percentages[index]}%</h1>
-                </div>
-              </div>
-            ))}
-          </div>
+          <h1 ref={evaluationRef} id='evaluation' className='pl-5 medium-18 pt-4 pb-3'>Kid&apos;s evaluation</h1>
+          <Evaluation id={row.id} />
         </DialogContent>
         <DialogActions >
           <Button className='flex flex-row gap-2 justify-center items-center bg-red-10' onClick={() => {
             setOpen(false);
             deleteKid();
           }} >
-            <RiDeleteBin6Line className='text-red-90 m-1' />
-            <label className='text-red-90 text-sm'>Delete</label>
+            <RiDeleteBin6Line className='text- disabledred-90 m-1' />
+            <label className='text- disabledred-90 text- disabledsm'>Delete</label>
           </Button>
-          <div className='flex flex-row gap-3'><Button onClick={() => setOpen(false)} className='bg-slate-100 text-blue-600 border border-blue-600'>Cancel</Button>
-            <Button className='bg-blue-700 text-white px-2  regular-12 mr-7' onClick={handleSubmit}> Save changes </Button></div>
+          <div className='flex flex-row gap-3'><Button onClick={() => setOpen(false)} className='bg-slate-100 text- disabledblue-600 border border-blue-600'>Cancel</Button>
+            <Button className='bg-blue-700 text- disabledwhite px-2  regular-12 mr-7' onClick={handleSubmit}> Save changes </Button></div>
         </DialogActions>
       </Dialog>
     </>
