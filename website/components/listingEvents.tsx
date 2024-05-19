@@ -8,6 +8,8 @@ import { Button, Dialog, DialogActions, DialogContent } from '@mui/material';
 import ContentField from './contentField';
 import ImagePicker from './ui/imagePicker';
 import axios from 'axios';
+import { FaListUl } from 'react-icons/fa';
+import KidsListDialog from './ui/kidsList';
 const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 interface Event {
@@ -20,11 +22,13 @@ interface Event {
 interface Props {
   onDelete: () => void;
   onEdit: () => void;
+  onList:()=>void;
 }
 
-const EventActions: React.FC<Props> = ({ onDelete, onEdit }) => {
+const EventActions: React.FC<Props> = ({ onDelete, onEdit, onList }) => {
   return (
     <div className="grid grid-rows-2 bg-white w-fit gap-2 " style={{ zIndex: 999 }}>
+      <button onClick={onList} className='flex' > <FaListUl className='mt-1 mr-1' /> List</button>
       <button onClick={onEdit} className='flex'><FiEdit3 className='mt-1 mr-1' /> Edit</button>
       <button onClick={onDelete} className='flex'><TbTrash className='mt-1 mr-1' /> Delete</button>
     </div>
@@ -35,6 +39,7 @@ const ListingEvents: React.FC = () => {
   const [showActions, setShowActions] = useState<boolean[]>([]);
   const [open, setOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [openKidsListDialog, setOpenKidsListDialog] = useState(false);
   const [selectedImagePath, setSelectedImagePath] = useState<string>('');
   const [events, setEvents] = useState<Event[]>([])
   const toggleActions = (index: number) => {
@@ -100,6 +105,16 @@ const ListingEvents: React.FC = () => {
     setOpen(true);
     setSelectedIndex(index);
   };
+
+  const handleList = (index: number) => {
+    setOpenKidsListDialog(true);
+    setSelectedIndex(index);
+  };
+
+  const handleCloseKidsListDialog = () => {
+    setOpenKidsListDialog(false);
+    setSelectedIndex(null);
+  }
   return (
     <div className='flex flex-col pt-5 gap-2 z-0'>
       {events.map((event: Event, index: number) => (
@@ -117,7 +132,7 @@ const ListingEvents: React.FC = () => {
             <BiDotsVerticalRounded onClick={() => toggleActions(index)} />
             {showActions[index] && (
               <div className='absolute top-1 border border-gray-300 shadow-2xl right-4 bg-white p-2 rounded-md' style={{ zIndex: 999 }}>
-                <EventActions onDelete={() => deleteEvent(index)} onEdit={() => handleEdit(index)} />
+                <EventActions onDelete={() => deleteEvent(index)} onEdit={() => handleEdit(index)} onList={() => handleList(index)} />
               </div>
             )}
           </div>
@@ -144,7 +159,11 @@ const ListingEvents: React.FC = () => {
           </DialogActions>
         </Dialog>
       </div>
-
+      <KidsListDialog
+        open={openKidsListDialog}
+        onClose={handleCloseKidsListDialog}
+        eventId={selectedIndex !== null ? events[selectedIndex].event_id : null}
+      />
     </div>
   );
 };
