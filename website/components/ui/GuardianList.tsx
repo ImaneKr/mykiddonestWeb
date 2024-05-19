@@ -161,7 +161,6 @@ const EditUserActionItem: React.FC<EditUserActionItemProps> = ({ row, deleteUser
                 pattern: '^\\+213(7|5|6)[0-9]{8}$', // Regular expression pattern for Algerian phone number
                 title: 'Please enter a valid Algerian phone number (e.g., +213xxxxxxxxx)', // Error message
               }}
-              error={!formValues.phone_number.match(/^\+213(7|5|6)[0-9]{8}$/)}
             />
           </div>
           <div className='flex   justify-between  items-center gap-20 mb-4 px-8'>

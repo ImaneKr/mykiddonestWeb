@@ -154,13 +154,12 @@ const EditUserActionItem: React.FC<EditUserActionItemProps> = ({ row, deleteUser
             <TextField type='text' className='  w-[99%]' name='firstname' size='small' label='Full Name' value={formValues.firstname} onChange={handleInputChange} />
           </div>
           <div className='block justify-center items-center  mb-4 px-8'>
-            <TextField  className='  w-[99%]' name='phone_number' size='small' label='Phone number' value={formValues.phone_number} onChange={handleInputChange}
-            inputProps={{
-              pattern: '^\\+213(7|5|6)[0-9]{8}$', // Regular expression pattern for Algerian phone number
-              title: 'Please enter a valid Algerian phone number (e.g., +213xxxxxxxxx)', // Error message
-            }}
-            error={!formValues.phone_number.match(/^\+213(7|5|6)[0-9]{8}$/)}
-           />
+            <TextField className='  w-[99%]' name='phone_number' size='small' label='Phone number' value={formValues.phone_number} onChange={handleInputChange}
+              inputProps={{
+                pattern: '^\\+213(7|5|6)[0-9]{8}$', // Regular expression pattern for Algerian phone number
+                title: 'Please enter a valid Algerian phone number (e.g., +213xxxxxxxxx)', // Error message
+              }}
+            />
           </div>
           <div className='block justify-center items-center  mb-4 px-8'>
             <TextField type='email' className='  w-[99%]' name='email' size='small' label='Email' value={formValues.email} onChange={handleInputChange} />

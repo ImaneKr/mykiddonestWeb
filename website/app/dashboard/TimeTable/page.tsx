@@ -28,7 +28,6 @@ const Page = () => {
       ) : selectedCategory === 'B' ? (
         <div className='flex p-2'><MyTimeTable category={'B'} isEditPressed={editButtonState} /></div>
       ) : null}
-      <div className={`flex  w-full pt-4 pr-2 justify-end items-end font-sans font-medium text-white ${!editButtonState ? 'opacity-20' : ''}`}><button className='flex w-16 h-10 p-2 rounded-md bg-blue-500 justify-center' onClick={handleButtonPress} disabled={!editButtonState}>Save</button></div>
     </div>
   );
 };

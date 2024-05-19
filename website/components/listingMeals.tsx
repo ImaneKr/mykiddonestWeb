@@ -34,7 +34,7 @@ const MealActions: React.FC<Props> = ({ onDelete, onCreate }) => {
 
 const ListingMeals: React.FC<{ allow: boolean }> = ({ allow }) => {
   const [lunchMenus, setLunchMenus] = useState<DayAndItsMeals[]>([]);
-  //const [selectedDay, setSelectedDay] = useState<string>('');
+
 
   useEffect(() => {
     const fetchLunchMenus = async () => {
@@ -67,6 +67,10 @@ const ListingMeals: React.FC<{ allow: boolean }> = ({ allow }) => {
   const [createDialogOpen, setCreateDialogOpen] = useState<boolean>(false);
   const [createdMeal, setCreatedMeal] = useState<Meal | null>();
 
+  const handleCreate = (index: number) => {
+    setSelectedIndex(index);
+    setCreateDialogOpen(true);
+  }
   const toggleActions = (index: number) => {
     setShowActions(prev => prev.map((value, i) => (i === index ? !value : false)));
   };
@@ -75,23 +79,23 @@ const ListingMeals: React.FC<{ allow: boolean }> = ({ allow }) => {
     // Implement delete functionality here
     console.log('Delete meal at index', dayIndex, mealIndex);
   };
-
-  /*const addMealItem = async () => {
+  const [mealname, setMealname] = useState<String>('')
+  const addMealItem = async () => {
     try {
-      const { day } = lunchMenus[selectedIndex!]; // Assuming selectedIndex is set somewhere when selecting a day
-  
+      const day = lunchMenus[selectedIndex!].day; // Assuming selectedIndex is set somewhere when selecting a day
+      console.log(day)
       // Assuming selectedImagePath holds the image URL
-      const { name: item_name, image: item_image_url } = createdMeal;
-  
-      const response = await axios.post(`${backendURL}/addMealItem`, {
-        day,
-        item_name,
-        item_image_url
+
+
+      const response = await axios.post(`${backendURL}/lunchmenu/add-item`, {
+        day_of_week: day,
+        item_name: mealname,
+        item_image_url: "/profil.png",
       });
-  
+
       // Handle response as needed
       console.log('New meal item added:', response.data);
-  
+
       // Reset state or perform any additional actions after successful addition
       setCreatedMeal({ name: '', image: '' });
       setCreateDialogOpen(false);
@@ -99,7 +103,7 @@ const ListingMeals: React.FC<{ allow: boolean }> = ({ allow }) => {
       console.error('Error adding meal item:', error);
       // Handle error
     }
-  };*/
+  };
 
   const handleCloseCreateDialog = () => {
     setCreateDialogOpen(false);
@@ -111,6 +115,31 @@ const ListingMeals: React.FC<{ allow: boolean }> = ({ allow }) => {
       ...prevMeal,
       [name]: value
     }));
+    setMealname(value)
+  };
+  const handleSubmit = async () => {
+    try {
+      const day = lunchMenus[selectedIndex!].day;
+      console.log(day)
+      const response = await axios.post(`${backendURL}/lunchmenu/add-item`, {
+        day_of_week: day,
+        item_name: createdMeal?.name,
+        item_image_url: selectedImagePath
+      });
+
+      // Update the state with the new meal item
+      const updatedLunchMenus = [...lunchMenus];
+      updatedLunchMenus[selectedIndex!].meals.push({
+        name: createdMeal?.name!,
+        image: selectedImagePath
+      });
+      setLunchMenus(updatedLunchMenus);
+
+      // Reset state after successful addition
+      handleCloseCreateDialog();
+    } catch (error) {
+      console.error('Error adding meal item:', error);
+    }
   };
 
   return (
@@ -131,7 +160,7 @@ const ListingMeals: React.FC<{ allow: boolean }> = ({ allow }) => {
                   <BiDotsVerticalRounded onClick={() => toggleActions(index)} />
                   {showActions[index] && (
                     <div className="absolute top-1 right-1 bg-white p-2 rounded-md shadow" style={{ zIndex: 999 }}>
-                      <MealActions onDelete={() => deleteMeal(index, 0)} onCreate={() => { }} />
+                      <MealActions onDelete={() => deleteMeal(index, 0)} onCreate={() => handleCreate(index)} />
                     </div>
                   )}
                 </div>
@@ -153,7 +182,7 @@ const ListingMeals: React.FC<{ allow: boolean }> = ({ allow }) => {
                 type='text'
                 size='small'
                 placeholder='Soup'
-                value={createdMeal ? createdMeal.name : ''}
+                value={mealname}
                 onChange={handleInputChange}
               />
             </div>
@@ -161,7 +190,7 @@ const ListingMeals: React.FC<{ allow: boolean }> = ({ allow }) => {
         </DialogContent>
         <DialogActions>
           <Button className='bg-slate-100 text-blue-600 border border-blue-600' onClick={handleCloseCreateDialog}>Cancel</Button>
-          <Button type='submit' className='bg-blue-600 text-white inline-block px-2 rounded-lg mr-10'>Submit</Button>
+          <Button type='submit' className='bg-blue-600 text-white inline-block px-2 rounded-lg mr-10' onClick={addMealItem}>Submit</Button>
         </DialogActions>
 
       </Dialog>

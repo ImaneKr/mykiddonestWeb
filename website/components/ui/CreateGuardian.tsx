@@ -253,7 +253,6 @@ const CreateGuardianAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => 
                 pattern: '^\\+213(7|5|6)[0-9]{8}$', // Regular expression pattern for Algerian phone number
                 title: 'Please enter a valid Algerian phone number (e.g., +213xxxxxxxxx)', // Error message
               }}
-              error={!formValues.phone_number.match(/^\+213(7|5|6)[0-9]{8}$/)}
             />
           </div>
           <div className='flex  lg:flex-row flex-col justify-between items-center lg:gap-20 mb-5 px-8'>

@@ -127,7 +127,6 @@ const handleSubmit = async (e: React.FormEvent) => {
                             pattern: '^\\+213(7|5|6)[0-9]{8}$', // Regular expression pattern for Algerian phone number
                             title: 'Please enter a valid Algerian phone number (e.g., +213xxxxxxxxx)', // Error message
                         }}
-                        error={!values.phone_number.match(/^\+213(7|5|6)[0-9]{8}$/)}
                     />
                     <label className='mb-2 ml-1'>Email</label>
                     <TextField type='email' name='email' label='Email' size='small'

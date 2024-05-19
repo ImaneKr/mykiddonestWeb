@@ -7,7 +7,7 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 import ImagePicker from './imagePicker';
 import { HiOutlineClipboardList } from 'react-icons/hi';
 import axios from 'axios';
-import Evaluation from './evaluation';
+
 const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 
@@ -29,10 +29,22 @@ interface Row {
   relationTochild: string;
   syndromes: string
 }
-interface SliderProps {
-  initialValue: number;
-  color: string;
+interface Evaluation {
+  id: number;
+  Subject: {
+    subject_name: string;
+    mark: number;
+  };
 }
+
+interface Marks {
+  letters: number;
+  numbers: number;
+  art: number;
+  communication: number;
+  physicalSkills: number;
+}
+
 // Define the props for EditUserActionItem
 interface EditKidActionItemProps {
   row: Row;
@@ -49,22 +61,60 @@ const EditKidActionItem: React.FC<EditKidActionItemProps> = ({ row, deleteKid, s
       evaluationRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
-
-  const [value, setValue] = useState<number>(0);
-
-
   const [open, setOpen] = React.useState(false);
 
 
   ///evaluationnn
+  ;
+  // fetch the kid mark 
+  const colors: string[] = ['text-orange-400', 'text-blue-400', 'text-green-90'];
+  const [mark, setMark] = useState<Marks>({ letters: 0, numbers: 0, art: 0, communication: 0, physicalSkills: 0 });
 
+  const handleSliderChange = (name: keyof Marks) => (event: Event, value: number | number[]) => {
+    setMark((prevMarks) => ({
+      ...prevMarks,
+      [name]: value as number,
+    }));
+    console.log(mark);
+  };
+
+  useEffect(() => {
+    // Fetch the evaluation data for the kid when the component mounts
+    const fetchEvaluationData = async () => {
+      try {
+        const response = await axios.get(`${backendURL}/evaluation/${row.id}`);
+        const evaluations: Evaluation[] = response.data;
+        console.log(response.data)
+        // Transform the evaluations data to match the state structure
+        const marks = evaluations.reduce((acc: Marks, evaluation: Evaluation) => {
+          const { subject_name, mark } = evaluation.Subject;
+          if (subject_name === 'Arabic Letters') acc.letters = mark;
+          if (subject_name === 'Numbers') acc.numbers = mark;
+          if (subject_name === 'Art and Crafts') acc.art = mark;
+          if (subject_name === 'Communication') acc.communication = mark;
+          if (subject_name === 'Physical Skills') acc.physicalSkills = mark;
+          return acc;
+        }, {
+          letters: 0,
+          numbers: 0,
+          art: 0,
+          communication: 0,
+          physicalSkills: 0,
+        });
+
+        setMark(marks);
+      } catch (error) {
+        console.error('Error fetching evaluation data:', error);
+      }
+    };
+
+    fetchEvaluationData();
+  }, [row.id]);
 
 
   //ediiiit kid profile
-
   const handleEdit = () => {
     setOpen(true);
-    // You can also pass 'row' to your dialog form here.
   };
 
   const handleClose = () => {
@@ -72,11 +122,8 @@ const EditKidActionItem: React.FC<EditKidActionItemProps> = ({ row, deleteKid, s
   };
   const [selectedImagePath, setSelectedImagePath] = useState<string>('');
 
-  const [profileInfo, setProfileInfo] = useState({ acc_pic: row.acc_pic, name: '', dateOfBirth: '', allergies: '', syndromes: '', hobbies: '', authorizedPicUpPersons: '' });
   const [isChangingAllowed, setIsChangingAllowed] = useState(false);
-  const allowChanges = () => {
-    setIsChangingAllowed(!isChangingAllowed);
-  };
+
 
   const [fetchedKid, setFetchedKid] = React.useState<Row | null>(null);
 
@@ -122,8 +169,22 @@ const EditKidActionItem: React.FC<EditKidActionItemProps> = ({ row, deleteKid, s
       });*/
       //console.log('Guardian updated:', response.data);
       // You can add additional logic here, such as updating the UI or showing a success message
+
+      const response = await axios.put(`${backendURL}/evaluation`, {
+        kid_id: row.id,
+        evaluations: [
+          { subject_id: 1, mark: mark.letters }, // Replace 1 with the actual subject_id for Arabic Letters
+          { subject_id: 2, mark: mark.numbers }, // Replace 2 with the actual subject_id for Numbers
+          { subject_id: 3, mark: mark.art }, // Replace 2 with the actual subject_id for Numbers
+          { subject_id: 4, mark: mark.communication }, // Replace 2 with the actual subject_id for Numbers
+          { subject_id: 5, mark: mark.physicalSkills }, // Replace 2 with the actual subject_id for Numbers
+          // Repeat this for all subjects
+        ]
+      });
+      console.log('Evaluation marks updated:', response.data);
     } catch (error) {
-      console.error('Error updating guardian:', error);
+      console.error('Error updating evaluation marks:', error);
+      //console.error('Error updating guardian:', error);
       // Handle error, such as displaying an error message to the user
     }
     setOpen(false);
@@ -200,7 +261,97 @@ const EditKidActionItem: React.FC<EditKidActionItemProps> = ({ row, deleteKid, s
           <hr className={`m-2.5`} />
 
           <h1 ref={evaluationRef} id='evaluation' className='pl-5 medium-18 pt-4 pb-3'>Kid&apos;s evaluation</h1>
-          <Evaluation id={row.id} />
+          <div className='flex justify-between mb-3 mx-4'>
+            <p className='regular-16 flex w-1/2 from-neutral-950'> Arabic Letters </p>
+            <Slider
+              name='letters'
+              onChange={handleSliderChange('letters')}
+              sx={{
+                color: '#8BC62A', // Color of the slider track and thumb
+                '& .MuiSlider-thumb': {
+                  backgroundColor: '#8BC62A', // Color of the thumb
+                },
+              }}
+              valueLabelDisplay="auto"
+
+              value={mark.letters}
+              step={10}
+              min={0}
+              max={100}
+            />
+          </div>
+          <div className='flex justify-between mb-3 mx-4'>
+            <p className='regular-16 flex w-1/2 from-neutral-950'> Numbers </p>
+            <Slider
+              name='numbers'
+              onChange={handleSliderChange('numbers')}
+              sx={{
+                color: '#379AE6', // Color of the slider track and thumb
+                '& .MuiSlider-thumb': {
+                  backgroundColor: '#379AE6', // Color of the thumb
+                },
+              }}
+              valueLabelDisplay="auto"
+              value={mark.numbers}
+              step={10}
+              min={0}
+              max={100}
+            />
+          </div>
+          <div className='flex justify-between mb-3 mx-4'>
+            <p className='regular-16 flex w-1/2 from-neutral-950'> Art and Crafts </p>
+            <Slider
+              name='art'
+              onChange={handleSliderChange('art')}
+              sx={{
+                color: '#FEC601', // Color of the slider track and thumb
+                '& .MuiSlider-thumb': {
+                  backgroundColor: '#FEC601', // Color of the thumb
+                },
+              }}
+              valueLabelDisplay="auto"
+              value={mark.art}
+              step={10}
+              min={0}
+              max={100}
+            />
+          </div>
+          <div className='flex justify-between mb-3 mx-4'>
+            <p className='regular-16 flex w-1/2 from-neutral-950'> Communication </p>
+            <Slider
+              name='communication'
+              onChange={handleSliderChange('communication')}
+              sx={{
+                color: '#f76e05', // Color of the slider track and thumb
+                '& .MuiSlider-thumb': {
+                  backgroundColor: '#f76e05', // Color of the thumb
+                },
+              }}
+              valueLabelDisplay="auto"
+              value={mark.communication}
+              step={10}
+              min={0}
+              max={100}
+            />
+          </div>
+          <div className='flex justify-between mb-3 mx-4'>
+            <p className='regular-16 flex w-1/2 from-neutral-950'> Physical skills </p>
+            <Slider
+              name='physicalSkills'
+              onChange={handleSliderChange('physicalSkills')}
+              sx={{
+                color: '#9004e0', // Color of the slider track and thumb
+                '& .MuiSlider-thumb': {
+                  backgroundColor: '#9004e0', // Color of the thumb
+                },
+              }}
+              value={mark.physicalSkills}
+              valueLabelDisplay="auto"
+              step={10}
+              min={0}
+              max={100}
+            />
+          </div>
         </DialogContent>
         <DialogActions >
           <Button className='flex flex-row gap-2 justify-center items-center bg-red-10' onClick={() => {
