@@ -10,8 +10,8 @@ const settings = {
 
 export default function Charts() {
     return (
-        <div className='flex justify-between'>
-            <div className=' ml-8 p-5 border rounded-md' >
+        <div className='flex justify-between lg:flex-row flex-col'>
+            <div className=' ml-8 p-5 border rounded-md h-fit' >
                 <h3 className='bold-18'>Payment Statistics</h3>
                 <p>2024</p>
                 <Gauge
@@ -38,12 +38,13 @@ export default function Charts() {
                     <p className='text-sm'>40% has yet to pay </p>
                 </div>
             </div>
-            <div>
+            <div className=' ml-5 p-5 border rounded-md h-fit'>
+                <h3 className='bold-18'>User Activity </h3>
                 <LineChart
                     xAxis={[{ data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] }]}
                     series={[
                         {
-                            data: [2, 3, 5.5, 8.5, 1.5, 5, 1, 4, 3, 8],
+                            data: [5, 5.5, 6, 7, 5, 8, 15, 10],
                             showMark: ({ index }) => index % 2 === 0,
                         },
                     ]}

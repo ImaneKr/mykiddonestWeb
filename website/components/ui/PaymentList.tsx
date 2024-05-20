@@ -6,8 +6,6 @@ import Image from 'next/image';
 import { TbTrash } from 'react-icons/tb';
 import ImagePicker from './imagePicker';
 import { profile } from 'console';
-import axios from 'axios';
-const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 // Define the type for row
 interface Row {
@@ -31,8 +29,19 @@ interface EditUserActionItemProps {
 const PaymentList = () => {
   const today = new Date();
   const formattedDate = today.toLocaleDateString('en-GB');
-  
-  const [rows, setRows] = React.useState<Row[]>([]);
+  const InitialRows: Row[] = [
+    {
+        id: 1, profile: '/person-3.png', guardian: 'Mariem', kid: 'Ahmed', amount: 4000,status:'Paid', rdate: formattedDate,
+    },
+     {
+        id: 2, profile: '', guardian: 'Khadidja', kid: 'Salma', amount:6000,status:'Unpaid', rdate: formattedDate,
+    },
+    {
+        id: 3, profile: '', guardian: 'Mariem', kid: 'Ahmed', amount: 4000,status:'Paid', rdate: formattedDate,
+    },
+  ];
+
+  const [rows, setRows] = React.useState<Row[]>(InitialRows);
 
   const deleteUser = React.useCallback(
     (id: number) => () => {

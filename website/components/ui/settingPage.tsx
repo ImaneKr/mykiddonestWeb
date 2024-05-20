@@ -101,7 +101,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                 <div className='justify-center flex rounded-lg bg-blue-90 w-32  pt-1 pb-1 text-white font-sans border border-gray-15 shadow-md'><button> Upload new</button></div>
                 <div className='justify-center flex rounded-lg bg-white w-24  pt-1 pb-1 text-black font-sans border border-gray-15 shadow-md'><button>Delete</button></div>
             </div>
-            <div className='lg:pl-10 pb-8 flex lg:flex-row flex-col  w-full gap-10  items-center '>
+            <div className='lg:pl-10 pb-8 flex justify-start items-start flex-col  w-full gap-10  '>
                 <div className='flex flex-col lg:w-2/6 w-4/5 '>
                     <label className='mb-2 ml-1'>First name</label>
                     <TextField type='text' name='firstname' label='First name' size='small'
