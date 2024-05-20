@@ -27,22 +27,22 @@ const MyTimeTable = ({ category, isEditPressed }: TimeTableProps) => {
   // Define days array
   const Days: string[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
 
-  let category_id;
-  if (category === 'A') {
-    category_id = 1;
-  } else if (category === 'B') {
-    category_id = 2;
-  } else {
-    return <div>Invalid category</div>;
-  }
-
   // Fetch timetable data on component mount
   useEffect(() => {
+    let category_id;
+    if (category === 'A') {
+      category_id = 1;
+    } else if (category === 'B') {
+      category_id = 2;
+    } else {
+      console.error('Invalid category');
+      return;
+    }
+
     const fetchTimetablesEntry = async (category_id: number) => {
       try {
         const response = await axios.get(`${backendURL}/timetable/${category_id}`);
         const Table = response.data;
-        console.log()
 
         // Create an array to hold the modified subjects
         const subjectsArray = Array.from({ length: Days.length }, () => Array(Timing.length).fill(''));
@@ -64,7 +64,7 @@ const MyTimeTable = ({ category, isEditPressed }: TimeTableProps) => {
     };
 
     fetchTimetablesEntry(category_id);
-  }, [category_id]);
+  }, [category]);
 
   // Event handler to update state when a subject value changes
   const handleSubjectChange = (dayIndex: number, subjectIndex: number, event: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,7 +76,6 @@ const MyTimeTable = ({ category, isEditPressed }: TimeTableProps) => {
   if (!timetableData) {
     return <div>Loading...</div>;
   }
-
 
   const handleButtonPress = async () => {
     try {
@@ -126,8 +125,9 @@ const MyTimeTable = ({ category, isEditPressed }: TimeTableProps) => {
           ))}
         </div>
       ))}
-      <div className={`flex  w-full pt-4 pr-2 justify-end items-end font-sans font-medium text-white `}><button className='flex w-16 h-10 p-2 rounded-md bg-blue-500 justify-center' onClick={handleButtonPress} disabled={!isEditPressed}>Save</button></div>
-
+      <div className={`flex  w-full pt-4 pr-2 justify-end items-end font-sans font-medium text-white `}>
+        <button className='flex w-16 h-10 p-2 rounded-md bg-blue-500 justify-center' onClick={handleButtonPress} disabled={!isEditPressed}>Save</button>
+      </div>
     </div>
   );
 };
