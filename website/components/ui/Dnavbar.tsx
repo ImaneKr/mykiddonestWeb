@@ -21,7 +21,7 @@ const Dnavbar = () => {
         </div>
         <div className='flex  items-center '>
             <NotificationContainer/>
-            <Link href='#'>
+            <Link href='/dashboard/settings'>
             <Image src='/person-3.png'alt='search' width={48} height={20} className='border-2 lg: flex rounded-full ' />  
             </Link>
         </div>

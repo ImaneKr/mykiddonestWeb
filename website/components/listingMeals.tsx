@@ -60,7 +60,7 @@ const ListingMeals: React.FC<{ allow: boolean }> = ({ allow }) => {
     fetchLunchMenus();
   }, []);
 
-  const colors: string[] = ['orange-400', 'blue-400'];
+  const colors: string[] = ['blue-400', 'yellow-40'];
   const [selectedImagePath, setSelectedImagePath] = useState<string>('');
   const [showActions, setShowActions] = useState<boolean[]>(new Array(lunchMenus.length).fill(false));
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);

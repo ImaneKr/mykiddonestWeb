@@ -14,7 +14,7 @@ module.exports = {
           30: '#E2FCEA',
           40: '#1DD75B',
         },
-        red:{
+        red: {
           10: '#FFEDED',
           90: '#B30506',
         },
@@ -29,14 +29,14 @@ module.exports = {
           99: '#424D60',
         },
         orange: {
-          10:'#D9D9D9',
-          15:'#FFF8E8',
-          20:'#F1E4B6',
-          30:'#FCE7A0',
-          40:'#F4D877',
-          50:'#F4D877',
-          70:'#FF814C',
-          90:'#FFF2D5',
+          10: '#D9D9D9',
+          15: '#FFF8E8',
+          20: '#F1E4B6',
+          30: '#FCE7A0',
+          40: '#F4D877',
+          50: '#F4D877',
+          70: '#FF814C',
+          90: '#FFF2D5',
         },
         blue: {
           70: '#021639',
@@ -55,12 +55,12 @@ module.exports = {
         'green-1': "url('/bg-green-1.jpg')",
         'green-2': "url('/bg-green-2.jpg')",
         'feature-bg': "url('/feature-bg.png')",
-        'login':"url('/login.jpg')",
+        'login': "url('/login.jpg')",
         pattern: "url('/pattern.png')",
         'pattern-2': "url('/pattern-bg.png')",
         'orange-cloud': "url('/cloud-yellow.jpg')",
-        'gradient-to-br':'linear-gradient(to bottom right,#F8EDC7,#F1E4B6,#FCE7A0,#F4D877,#F4D877)',
-        'bgbg':"url('/bgbg.png')",
+        'gradient-to-br': 'linear-gradient(to bottom right,#F8EDC7,#F1E4B6,#FCE7A0,#F4D877,#F4D877)',
+        'bgbg': "url('/bgbg.png')",
       },
       screens: {
         xs: '400px',
@@ -73,7 +73,7 @@ module.exports = {
       borderRadius: {
         '5xl': '40px',
       },
-      
+
     },
   },
   plugins: [],
