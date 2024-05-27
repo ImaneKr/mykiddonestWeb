@@ -17,7 +17,7 @@ const Page = () => {
     const handleLogin = async (e: any) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`${backendURL}/login/staff`, {
+            const response = await axios.post(`${backendURL}/auth/staff`, {
                 username: username,
                 staff_pwd: password
             });
