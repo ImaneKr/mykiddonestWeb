@@ -10,9 +10,9 @@ type ImagePickerProps = {
   contentPicPath?: string;
   isMealPic?: boolean;
   mealPic?: string;
-  forCreation?:boolean;
+  forCreation?: boolean;
   onImageSelected: (imgPath: string) => void;
-  
+
 };
 
 const ImagePicker: React.FC<ImagePickerProps> = ({
@@ -91,27 +91,24 @@ const ImagePicker: React.FC<ImagePickerProps> = ({
         )}
         {!image && isProfilePic && profilePic && (
           <div
-            className={`flex justify-center items-center rounded-full p-1 ${
-              disabled ? "border-2 border-gray-300" : "border border-dashed border-blue-700"
-            }`}
+            className={`flex justify-center items-center rounded-full p-1 ${disabled ? "border-2 border-gray-300" : "border border-dashed border-blue-700"
+              }`}
           >
-            <Image src={profilePic} height={90} width={90} alt="profile pic" />
+            <Image src={profilePic} height={90} width={90} alt="profile pic" className="rounded-full" />
           </div>
         )}
         {!image && isMealPic && mealPic && (
           <div
-            className={`flex ${forCreation?'w-40 h-40':'w-28 h-28'} rounded-md border ${
-              disabled ? "border-gray-300" : "border-dashed border-blue-600"
-            } p-1`}
+            className={`flex ${forCreation ? 'w-40 h-40' : 'w-28 h-28'} rounded-md border ${disabled ? "border-gray-300" : "border-dashed border-blue-600"
+              } p-1`}
           >
             <img src={mealPic} className="h-full w-full" alt="meal pic" />
           </div>
         )}
         {image && isMealPic && mealPic && (
           <div
-            className={`flex ${forCreation?'w-40 h-40':'w-28 h-28'} rounded-md border ${
-              disabled ? "border-gray-300" : "border-dashed border-blue-600"
-            } p-1`}
+            className={`flex ${forCreation ? 'w-40 h-40' : 'w-28 h-28'} rounded-md border ${disabled ? "border-gray-300" : "border-dashed border-blue-600"
+              } p-1`}
           >
             <img src={image} className="h-full w-full" alt="meal pic" />
           </div>

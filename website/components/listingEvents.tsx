@@ -22,7 +22,7 @@ interface Event {
 interface Props {
   onDelete: () => void;
   onEdit: () => void;
-  onList:()=>void;
+  onList: () => void;
 }
 
 const EventActions: React.FC<Props> = ({ onDelete, onEdit, onList }) => {
@@ -42,6 +42,8 @@ const ListingEvents: React.FC = () => {
   const [openKidsListDialog, setOpenKidsListDialog] = useState(false);
   const [selectedImagePath, setSelectedImagePath] = useState<string>('');
   const [events, setEvents] = useState<Event[]>([])
+  const images: string[] = ['/birthdayparty.jpg', '/zootrip.jpg'];
+
   const toggleActions = (index: number) => {
     setShowActions((prev) => prev.map((value, i) => (i === index ? !value : false)));
   };
@@ -118,11 +120,11 @@ const ListingEvents: React.FC = () => {
   return (
     <div className='flex flex-col pt-5 gap-2 z-0'>
       {events.map((event: Event, index: number) => (
-        <div key={index} className='relative w-80 h-16 border border-gray-15 mt-1 rounded-md flex items-center shadow'>
+        <div key={index} className='relative w-[17rem] h-24 border border-gray-15 mt-1 rounded-md flex items-center shadow'>
           {event.event_image ? (
-            <Image src={event.event_image} width={55} height={55} alt={`Event ${index + 1}`} className=' p-0.5 m-1 rounded-md border border-gray-15 shadow' />
+            <img src={images[index % 2]} width={80} alt={`Event ${index + 1}`} className=' p-0.5 m-1 rounded-md border border-gray-15 shadow' />
           ) : (
-            <Image src='/defaultEvent.jpeg' width={55} height={55} alt={`Default Event Image`} className='p-0.5 m-1 rounded-md border border-gray-15 shadow' />
+            <Image src='/defaultEvent.jpeg' width={80} height={55} alt={`Default Event Image`} className='p-0.5 m-1 rounded-md border border-gray-15 shadow' />
           )}
           <div className='flex flex-col items-start justify-center pl-3'>
             <label>{event.event_name}</label>

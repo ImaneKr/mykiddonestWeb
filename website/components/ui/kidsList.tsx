@@ -20,7 +20,7 @@ const KidsListDialog: React.FC<Props> = ({ open, onClose, eventId }) => {
 
     useEffect(() => {
         if (open && eventId !== null) {
-            fetchKids(eventId);
+            // fetchKids(eventId);
         }
     }, [open, eventId]);
 
@@ -36,16 +36,23 @@ const KidsListDialog: React.FC<Props> = ({ open, onClose, eventId }) => {
         }
     };
 
+    const staticList = [
+        { kid_id: 1, firstname: "Lily", lastname: "Smith" },
+        { kid_id: 2, firstname: "John", lastname: "Doe" }
+    ];
+
     return (
         <Dialog open={open} onClose={onClose} aria-labelledby="kids-list-dialog-title">
-            <DialogTitle id="kids-list-dialog-title">Kids List</DialogTitle>
+            <DialogTitle id="kids-list-dialog-title">Acceptance List</DialogTitle>
             <DialogContent>
                 {loading ? (
                     <CircularProgress />
                 ) : (
                     <ul>
-                        {kids.map((kid) => (
-                            <li key={kid.kid_id}>{kid.firstname}{kid.lastname}</li>
+                        {staticList.map((kid) => (
+                            <li key={kid.kid_id}>
+                                -  {kid.firstname} {kid.lastname}
+                            </li>
                         ))}
                     </ul>
                 )}

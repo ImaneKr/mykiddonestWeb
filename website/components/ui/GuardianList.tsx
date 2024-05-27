@@ -144,7 +144,7 @@ const EditUserActionItem: React.FC<EditUserActionItemProps> = ({ row, deleteUser
         <DialogContent >
           <div className='flex flex-row justify-between items-center lg:pr-10 lg:pl-5'>
             <div className='flex h-30 w-30'>
-              <ImagePicker onImageSelected={setSelectedImagePath} disabled={!isChangingAllowed} isProfilePic={true} profilePic={formValues.acc_pic} />
+              <ImagePicker onImageSelected={setSelectedImagePath} disabled={!isChangingAllowed} isProfilePic={true} profilePic='/dfprofile.jpg' />
             </div>
             <div className='flex flex-row justify-start lg:gap-10 gap-4 lg:pr-28 items-center'> <p className='text-3xl font-semibold font-sans'>{formValues.firstname} {formValues.lastname}</p>
               <Button className='flex w-8 h-8 pt-1 text-slate-600' onClick={allowChanges}><FiEdit3 className='w-full h-full ' /></Button>   </div>
@@ -274,7 +274,7 @@ const GuardianList = () => {
         filterable: false,
         sortable: false,
         renderCell: (params: GridCellParams) => (
-          <Image src={params.row.profile as string} alt="Profile" width={45} height={45} className='rounded-full' />
+          <Image src='/dfprofile.jpg' alt="Profile" width={45} height={45} className='rounded-full' />
         ),
       },
       {

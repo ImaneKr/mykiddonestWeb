@@ -145,7 +145,7 @@ const EditUserActionItem: React.FC<EditUserActionItemProps> = ({ row, deleteUser
       >
         <DialogContent >
           <div className='flex flex-row justify-between items-center lg:pr-10 lg:pl-5 pr-3'>
-            <div className='flex h-30 w-30'> <ImagePicker onImageSelected={setSelectedImagePath} disabled={false} isProfilePic={true} profilePic={formValues.staff_pic} /></div>
+            <div className='flex h-30 w-30 rounded-full'> <ImagePicker onImageSelected={setSelectedImagePath} disabled={false} isProfilePic={true} profilePic='/df2profile.jfif' /></div>
             <div className='flex flex-row justify-start lg:gap-10 gap-4 lg:pr-28 items-center'> <p className='text-3xl font-semibold font-sans'>{name}</p>
             </div>
           </div>
@@ -253,14 +253,14 @@ const StaffList = () => {
   const columns = React.useMemo<GridColDef<Row>[]>(
     () => [
       {
-        field: 'profile',
+        field: 'staff_pic',
         headerName: '',
         headerClassName: ' hidden justify-center bold-20',
         width: 60,
         filterable: false,
         sortable: false,
         renderCell: (params: GridCellParams) => (
-          <Image src={params.row.profile as string} alt="Profile" width={45} height={45} className='rounded-full' />
+          <Image src='/df2profile.jfif' alt="Profile" width={45} height={45} className='rounded-full' />
         ),
       },
       {

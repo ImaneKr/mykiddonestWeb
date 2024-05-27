@@ -7,7 +7,7 @@ import Activities from '@/components/ui/Activities';
 import Charts from '@/components/ui/charts';
 
 const page = () => {
-  const userName = ['Sarah'];
+  const userName = ['Admin'];
   return (
     <div className='flex flex-col w-full justify-center items-center'>
       <div className='bg-white mt-1 ml-1 p-3 flex flex-col w-[99%] rounded-md'>
@@ -53,7 +53,7 @@ const page = () => {
         </div>
         <p className=' bold-24 w-auto pt-2'>Insights</p>
         <div className='justify-between flex pt-6'>
-          <Charts />
+          <Charts/>
           <Activities />
         </div>
       </div>

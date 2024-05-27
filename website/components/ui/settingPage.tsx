@@ -48,49 +48,49 @@ const SettingPage = () => {
         };
         fetchStaffByID();
     }, [userID]);
-/// update  the account 
-const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    let staff_id = userID
-    try {
-      const response = await axios.put(`${backendURL}/staff/${staff_id}`, {
-        firstname: values.firstname,
-        lastname: values.lastname, 
-        username: values.username,
-        staff_pwd: values.staff_pwd,
-        email: values.email,
-        phone_number: values.phone_number,
-        
-      });
+    /// update  the account 
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        let staff_id = userID
+        try {
+            const response = await axios.put(`${backendURL}/staff/${staff_id}`, {
+                firstname: values.firstname,
+                lastname: values.lastname,
+                username: values.username,
+                staff_pwd: values.staff_pwd,
+                email: values.email,
+                phone_number: values.phone_number,
 
-      console.log('staff updated:', response.data);
-    } catch (error) {
-      console.error('Error updating staff:', error);
+            });
 
+            console.log('staff updated:', response.data);
+        } catch (error) {
+            console.error('Error updating staff:', error);
+
+        }
+    };
+
+    // delete the account 
+    const deleteUser = async () => {
+
+        let staff_id = userID
+        try {
+            const response = await axios.delete(`${backendURL}/staff/${staff_id}`);
+            console.log('staff deleted:', response.data);
+            localStorage.clear();
+            router.replace('/login')
+        } catch (error) {
+            console.error('Error deleting staff:', error);
+            // Handle error, such as displaying an error message to the user
+        }
     }
-  };
-
-  // delete the account 
-  const deleteUser = async () => {
-  
-    let staff_id = userID
-    try {
-      const response = await axios.delete(`${backendURL}/staff/${staff_id}`);
-      console.log('staff deleted:', response.data);
-      localStorage.clear();
-      router.replace('/login')
-    } catch (error) {
-      console.error('Error deleting staff:', error);
-      // Handle error, such as displaying an error message to the user
-    }
-  }
     return (
         <div className='bg-white p-3 h-4/5 w-full rounded-md border border-gray-15 shadow-xl'>
             <div className='flex flex-row '>
                 <p className='text-2xl font-sans font-medium w-full'>My Account</p>
                 <div className='flex w-44  bg-red-10 rounded-xl pt-2 pb-2 '>
                     <button className='flex flex-row gap-3 justify-center items-center'
-                    onClick={deleteUser}>
+                        onClick={deleteUser}>
                         <RiDeleteBin6Line className='text-red-90 m-1' />
                         <label className='text-red-90 text-sm'>Delete account</label>
                     </button>
@@ -101,25 +101,31 @@ const handleSubmit = async (e: React.FormEvent) => {
                 <div className='justify-center flex rounded-lg bg-blue-90 w-32  pt-1 pb-1 text-white font-sans border border-gray-15 shadow-md'><button> Upload new</button></div>
                 <div className='justify-center flex rounded-lg bg-white w-24  pt-1 pb-1 text-black font-sans border border-gray-15 shadow-md'><button>Delete</button></div>
             </div>
-            <div className='lg:pl-10 pb-8 flex justify-start items-start flex-col  w-full gap-10  '>
+            <div className='lg:pl-10 pb-8 flex justify-between  items-start flex-row  w-full'>
                 <div className='flex flex-col lg:w-2/6 w-4/5 '>
                     <label className='mb-2 ml-1'>First name</label>
-                    <TextField type='text' name='firstname' label='First name' size='small'
+                    <TextField type='text' name='firstname' size='small'
                         value={values.firstname}
                         onChange={handleInputChange}
                         className='  w-[99%]'
                     />
                     <label className='mb-2 ml-1'>Last name</label>
-                    <TextField type='text' name='lastname' label='Last name' size='small'
+                    <TextField type='text' name='lastname' size='small'
                         value={values.lastname}
                         onChange={handleInputChange}
                         className='  w-[99%]'
                     />
+                    <label className='mb-2 ml-1'>Username</label>
+                    <TextField type='text' name='lastname' size='small'
+                        value={values.username}
+                        onChange={handleInputChange}
+                        className='  w-[99%]'
+                    />
                 </div>
-                <hr className='w-[80%]' />
-                <div className='flex flex-col lg:w-2/6 w-4/5 '>
+
+                <div className='flex flex-col lg:w-2/6 lg:mr-10'>
                     <label className='mb-2 ml-1'>Phone Number</label>
-                    <TextField name='phone_number' label='Phone Number' size='small'
+                    <TextField name='phone_number' size='small'
                         value={values.phone_number}
                         onChange={handleInputChange}
                         className='  w-[99%]'
@@ -129,12 +135,12 @@ const handleSubmit = async (e: React.FormEvent) => {
                         }}
                     />
                     <label className='mb-2 ml-1'>Email</label>
-                    <TextField type='email' name='email' label='Email' size='small'
+                    <TextField type='email' name='email' size='small'
                         value={values.email}
                         onChange={handleInputChange}
                         className='  w-[99%]'
                     />
-                    <label className='mb-2 ml-1'>Phone Number</label>
+                    <label className='mb-2 ml-1'>Password</label>
                     <TextField
                         type={showPassword ? 'text' : 'password'}
                         name='staff_pwd'

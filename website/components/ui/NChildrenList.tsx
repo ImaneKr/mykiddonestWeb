@@ -408,6 +408,7 @@ const KidList = () => {
             prof_pic: row.prof_pic,
             name: `${row.firstname} ${row.lastname}`,
             age: row.age,
+            gender: row.gender,
             guardian: guardianName,
             category: categoryName,
             RegestratedDate: new Date(row.prof_time_creation).toLocaleDateString(),
@@ -444,9 +445,22 @@ const KidList = () => {
         width: 60,
         filterable: false,
         sortable: false,
-        renderCell: (params: GridCellParams) => (
-          <Image src={params.row.profile as string} alt="Profile" width={45} height={45} className='rounded-full' />
-        ),
+        renderCell: (params: GridCellParams) => {
+          const { prof_pic, gender } = params.row;
+
+          let profileSrc =  '';
+          if (!profileSrc) {
+            if (gender === 'male') {
+              profileSrc = '/boy.jpg';
+            } else if (gender === 'female') {
+              profileSrc = '/girl.jpg';
+            } else {
+              profileSrc = '/girl.jpg'; // Optional: a generic default image for unspecified gender
+            }
+          }
+
+          return <Image src={profileSrc} alt="Profile" width={45} height={45} className="rounded-full" />;
+        }
       },
       {
         field: 'name',

@@ -3,14 +3,14 @@ import { Gauge, gaugeClasses } from '@mui/x-charts/Gauge';
 import { LineChart, lineElementClasses } from '@mui/x-charts/LineChart';
 
 const settings = {
-    width: 170,
-    height: 170,
+    width: 150,
+    height: 150,
     value: 60,
 };
 
 export default function Charts() {
     return (
-        <div className='flex justify-between lg:flex-row flex-col'>
+        <div className='flex justify-between items-center gap-7 lg:flex-row flex-col'>
             <div className=' ml-8 p-5 border rounded-md h-full' >
                 <h3 className='bold-18'>Payment Statistics</h3>
                 <p>2024</p>
@@ -38,7 +38,7 @@ export default function Charts() {
                     <p className='text-sm'>40% has yet to pay </p>
                 </div>
             </div>
-            <div className=' mx-2 p-5 border rounded-md h-fit'>
+            <div className='p-5 border rounded-md h-fit'>
                 <h3 className='bold-18'>User Activity </h3>
                 <LineChart
                     xAxis={[{ data: [1, 2, 3, 4, 5, 6, 7, 8] }]}
@@ -48,7 +48,7 @@ export default function Charts() {
                             showMark: ({ index }) => index % 2 === 0,
                         },
                     ]}
-                    width={400}
+                    width={350}
                     height={300}
                     sx={(theme) => ({
                         '& .MuiLineElement-root': {

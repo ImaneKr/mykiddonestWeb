@@ -5,6 +5,7 @@ const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 type TimeTableProps = {
   category: string;
   isEditPressed: boolean;
+  role?: any;
 };
 
 type TimetableEntry = {
@@ -17,7 +18,7 @@ type TimetableEntry = {
   duration: number;
 };
 
-const MyTimeTable = ({ category, isEditPressed }: TimeTableProps) => {
+const MyTimeTable = ({ category, isEditPressed, role }: TimeTableProps) => {
   const [modifiedSubjects, setModifiedSubjects] = useState<string[][]>([]);
   const [timetableData, setTimetableData] = useState<TimetableEntry[] | null>(null);
 
@@ -98,6 +99,7 @@ const MyTimeTable = ({ category, isEditPressed }: TimeTableProps) => {
     }
   }
 
+
   return (
     <div className="flex flex-col h-auto overflow-x-scroll">
       <div className='pl-24 flex flex-row gap-36'>
@@ -125,9 +127,9 @@ const MyTimeTable = ({ category, isEditPressed }: TimeTableProps) => {
           ))}
         </div>
       ))}
-      <div className={`flex  w-full pt-4 pr-2 justify-end items-end font-sans font-medium text-white `}>
+      {(role === 'admin' || role === 'secretary') && (<div className={`flex  w-full pt-4 pr-2 justify-end items-end font-sans font-medium text-white `}>
         <button className='flex w-16 h-10 p-2 rounded-md bg-blue-500 justify-center' onClick={handleButtonPress} disabled={!isEditPressed}>Save</button>
-      </div>
+      </div>)}
     </div>
   );
 };

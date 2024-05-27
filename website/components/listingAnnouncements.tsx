@@ -38,6 +38,7 @@ const ListingAnnouncements: React.FC = () => {
   const [announcements, setAnnouncement] = useState<Announcement[]>([]);
 
   const [selectedImagePath, setSelectedImagePath] = useState<string>(''); // State to hold selected image path
+  const images: string[] = ['/lunch.jpg', '/relocation.jpg'];
 
   const toggleActions = (index: number) => {
     setShowActions((prev) => prev.map((value, i) => (i === index ? !value : false)));
@@ -111,7 +112,7 @@ const ListingAnnouncements: React.FC = () => {
       {announcements.map((announcement: Announcement, index: number) => (
         <div key={index} className='relative w-[95%] h-24 border py-1 border-gray-15 mt-1 pr-1 rounded-md flex items-center shadow'>
           {announcement.announcement_image ? (
-            <Image src={announcement.announcement_image} width={80} height={80} alt={`announcement ${index + 1}`} className='p-0.5 h-full m-1 rounded-md border border-gray-15 shadow' />
+            <img src={images[index % 2]} width={80} height={70} alt={`announcement ${index + 1}`} className='p-0.5 h-full m-1 rounded-md border border-gray-15 shadow' />
           ) : (
             <Image src='/defaultAnnouncement.jpg' width={80} height={80} alt={`Default announcement Image`} className='p-0.5 h-full m-1 rounded-md border border-gray-15 shadow' />
           )}

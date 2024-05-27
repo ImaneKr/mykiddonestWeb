@@ -90,7 +90,7 @@ const ListingMeals: React.FC<{ allow: boolean }> = ({ allow }) => {
       const response = await axios.post(`${backendURL}/lunchmenu/add-item`, {
         day_of_week: day,
         item_name: mealname,
-        item_image_url: "/profil.png",
+        item_image_url: "/rice-bool.jpg",
       });
 
       // Handle response as needed
@@ -152,7 +152,7 @@ const ListingMeals: React.FC<{ allow: boolean }> = ({ allow }) => {
               <div className='flex lg:flex-row flex-col gap-3'>
                 {day.meals.map((meal: Meal, mealIndex: number) => (
                   <div key={mealIndex} className='flex flex-col items-center justify-center'>
-                    <ImagePicker disabled={!allow} onImageSelected={setSelectedImagePath} isMealPic={true} mealPic={meal.image} />
+                    {meal.image !== null && <ImagePicker disabled={!allow} onImageSelected={setSelectedImagePath} isMealPic={true} mealPic="/rice-bool.jpg" />}
                     <MealField initialValue={meal.name} disabled={!allow} />
                   </div>
                 ))}
