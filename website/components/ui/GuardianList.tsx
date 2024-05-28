@@ -274,7 +274,7 @@ const GuardianList = () => {
         filterable: false,
         sortable: false,
         renderCell: (params: GridCellParams) => (
-          <Image src='/dfprofile.jpg' alt="Profile" width={45} height={45} className='rounded-full' />
+          <Image src='/dfProfile.jpg' alt="Profile" width={45} height={45} className='rounded-full' />
         ),
       },
       {
