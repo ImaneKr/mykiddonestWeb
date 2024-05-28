@@ -67,16 +67,8 @@ const CreateGuardianAccount: React.FC<FormDialogProps> = ({ open, setOpen }) => 
 
     try {
       // Create form data
-      const formData = new FormData();
-      // Append form values
-      Object.entries(formValues).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
-      // Append image file
-      if (image) {
-        formData.append('acc_pic', dataURLtoFile(image, 'profile.jpg'));
-      }
-      const response = await axios.post(`${backendURL}/guardian`, formData
+
+      const response = await axios.post(`${backendURL}/guardian`, formValues
 
       );
       console.log(response.data);
