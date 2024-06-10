@@ -45,7 +45,7 @@ const KidsListDialog: React.FC<Props> = ({ open, onClose, eventId }) => {
         <Dialog open={open} onClose={onClose} aria-labelledby="kids-list-dialog-title">
             <DialogTitle id="kids-list-dialog-title">Acceptance List</DialogTitle>
             <DialogContent>
-                {loading ? (
+                {loading== false ? (
                     <CircularProgress />
                 ) : (
                     <ul>
