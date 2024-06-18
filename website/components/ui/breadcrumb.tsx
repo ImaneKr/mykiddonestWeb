@@ -25,7 +25,7 @@ const NextBreadcrumb = ({
   const pathNames = paths.split('/').filter((path) => path);
 
   return (
-    <div className='w-[99%]'>
+    <div className='w-[98%]'>
       <ul className={containerClasses}>
         <li className={listClasses}>
           <Link href={'/'}>{homeElement}</Link>

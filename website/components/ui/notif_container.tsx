@@ -12,12 +12,12 @@ const NotificationContainer = () => {
     };
 
     return (
-        <div className="relative w-auto">
+        <div className=" items-center flex w-auto">
             <button
                 onClick={toggleNotifications}
                 className="p-2 rounded-full"
             >
-           <FaRegBell  className='size-6' color='#000000'/>
+                <FaRegBell className='size-6' color='#FFFFFF' />
             </button>
 
             {showNotifications && (

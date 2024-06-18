@@ -12,6 +12,8 @@ import { GoSignOut } from "react-icons/go";
 import { useRouter } from 'next/navigation'
 import Link from "next/link";
 import Image from "next/image";
+import axios from "axios";
+const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL
 // Retrieve the user's role from localStorage
 
 
@@ -45,11 +47,19 @@ const Sidebar = () => {
     const userole = localStorage.getItem('userRole');
     setUserRole(userole);
   }, []);
-  const handleLogout = () => {
+  const handleLogout = async () => {
 
-    localStorage.clear();
-
-    router.push('/login');
+    try {
+      const response = await axios.get(`${backendURL}/auth/logout`, {});
+      if (response.status === 200) {
+        localStorage.clear();
+        router.push('/login');
+      } else {
+        console.error('Failed to log out');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (

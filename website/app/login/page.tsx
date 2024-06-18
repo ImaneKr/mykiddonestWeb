@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation'
 import axios from 'axios'
 
 const Page = () => {
-    const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL || ''; // Provide a default value if NEXT_PUBLIC_BACKEND_URL is undefined
+    const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL; // Provide a default value if NEXT_PUBLIC_BACKEND_URL is undefined
     const router = useRouter();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -21,14 +21,14 @@ const Page = () => {
                 username: username,
                 staff_pwd: password
             });
-            console.log(response.data)
+            console.log(response.data.token)
             const Role = response.data.staff.role
             console.log(response.data.staff.staff_id)
 
             // Retrieve the user's role from localStorage
             localStorage.setItem('userRole', response.data.staff.role);
             localStorage.setItem('userID', response.data.staff.staff_id);
-
+            localStorage.setItem('Token',response.data.token)
             // If login is successful, redirect to dashboard
             if (response.data.token) {
                 console.log("Login successful")

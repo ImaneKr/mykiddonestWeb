@@ -20,7 +20,7 @@ const KidsListDialog: React.FC<Props> = ({ open, onClose, eventId }) => {
 
     useEffect(() => {
         if (open && eventId !== null) {
-            // fetchKids(eventId);
+            fetchKids(eventId);
         }
     }, [open, eventId]);
 
@@ -29,6 +29,7 @@ const KidsListDialog: React.FC<Props> = ({ open, onClose, eventId }) => {
         try {
             const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/eventlist/${eventId}/acceptance`);
             setKids(response.data);
+            setLoading(false);
         } catch (error) {
             console.error('Error fetching kids:', error);
         } finally {
@@ -45,11 +46,11 @@ const KidsListDialog: React.FC<Props> = ({ open, onClose, eventId }) => {
         <Dialog open={open} onClose={onClose} aria-labelledby="kids-list-dialog-title">
             <DialogTitle id="kids-list-dialog-title">Acceptance List</DialogTitle>
             <DialogContent>
-                {loading== false ? (
+                {loading ? (
                     <CircularProgress />
                 ) : (
                     <ul>
-                        {staticList.map((kid) => (
+                        {kids.map((kid) => (
                             <li key={kid.kid_id}>
                                 -  {kid.firstname} {kid.lastname}
                             </li>
