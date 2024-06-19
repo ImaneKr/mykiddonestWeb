@@ -77,7 +77,7 @@ const Sidebar = () => {
               />
             </button>
             {isOpen && (
-              <div className={`flex flex-col justify-between w-60 h-screen bg-white z-20 fixed lg:static shadow-inner ${window.innerHeight < 500 ? 'overflow-y-scroll' : ''}`}>
+              <div className={`flex flex-col justify-between w-60 h-screen bg-white  z-20 fixed lg:static shadow-inner ${window.innerHeight < 500 ? 'overflow-y-scroll' : ''}`}>
                 <div className="flex flex-col justify-start items-start">
                   <div className="  justify-center items-center ">
                     <Image alt="logo" width={210} height={52} src="/logo.png" className=" p-4 pb-2" />

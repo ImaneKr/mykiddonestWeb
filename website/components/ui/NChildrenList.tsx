@@ -373,6 +373,8 @@ const KidList = () => {
   const today = new Date();
   const formattedDate = today.toLocaleDateString('en-GB');
   const [rows, setRows] = React.useState<Row[]>([]);
+  const [status, setStatus] = useState<any>("approved")
+
 
   /// fetch the guardian name and the category name
   useEffect(() => {
@@ -396,8 +398,10 @@ const KidList = () => {
       }
     };
     const fetchKids = async () => {
+
+
       try {
-        const response = await axios.get(`${backendURL}/kid`);
+        const response = await axios.get(`${backendURL}/kid`, { params: { Status: status } });
         const data = response.data;
         console.log(data);
         const formattedRows = await Promise.all(data.map(async (row: any) => {
@@ -448,7 +452,7 @@ const KidList = () => {
         renderCell: (params: GridCellParams) => {
           const { prof_pic, gender } = params.row;
 
-          let profileSrc =  '';
+          let profileSrc = '';
           if (!profileSrc) {
             if (gender === 'male') {
               profileSrc = '/boy.jpg';
