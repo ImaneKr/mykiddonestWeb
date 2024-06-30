@@ -137,7 +137,7 @@ const DemandInbox = () => {
     return (
         <div className='flex items-center ml-10'>
             <Button className='rounded-full' onClick={toggleInbox}>
-                <LuInbox className='text-white size-6' />
+                <LuInbox className='text-white size-6'/>
             </Button>
             {showInbox && (
                 <div className="absolute z-50 top-10 w-auto cursor-pointer right-36 p-4 bg-white shadow-md rounded-md">
