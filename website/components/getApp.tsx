@@ -10,27 +10,20 @@ const getApp = () => {
                justify-center gap-10'>
                 <h2 className='bold-40 lg:bold-52 xl:max-w[320px]'> Get for free now!</h2>
                 <p className='regular-18 lg:regular-20'> Available on IOS and android, download now!!</p>
-                <div className='flex w-full flex-col gap-3 whitespace-nowrap lg:flex-row '>
+                <div className='flex w-full flex-col gap-3 whitespace-nowrap lg:flex-row px-32'>
     
                 <Button 
                     type='button'
-                    title='Play Store'
-                    icon='/icons/mage--playstore.svg'
+                    title='Download from here'
+                    icon='/icons/download.png'
                     variant='btn_white'
-                    link='#'
+                    link='https://www.mediafire.com/file/iqom2qds9mc6vin/MyKiddoNest.apk/file'
                     full
                     />
-                <Button 
-                    type='button'
-                    title='App Store'
-                    icon='/icons/apple-logo.svg'
-                    variant='btn_transparent'
-                    link='#'
-                    full
-                    />       
+                
                 </div>
                 <p className='regular-18 lg:regular-20'> Or scan this code with your phone</p>
-                <Image src='/qrCode.png' alt='' width={200} height={24} className='rounded-2xl'/>
+                <Image src='/qrCode.png' alt='' width={200} height={24} className='rounded-2xl '/>
                </div>
                 <div className='flex flex-1 items-center mt-[-4rem] justify-end'>
                 <Image src='/phone-mockup.png' alt='' width={574} height={800} /> 

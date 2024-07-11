@@ -32,7 +32,7 @@ const intro = () => {
               </p>
         </div>
         <div className='flex w-full gap-3 sm:flex-row'>
-          <Button type='button' title='Download App' variant='btn_yellow' link='#'/>
+          <Button type='button' title='Download App' variant='btn_yellow' link='https://www.mediafire.com/file/iqom2qds9mc6vin/MyKiddoNest.apk/file'/>
         </div>
       </div>
       <div className='hidden lg:flex h-[350px] mr-12'>
