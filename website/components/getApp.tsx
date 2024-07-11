@@ -10,7 +10,7 @@ const getApp = () => {
                justify-center gap-10'>
                 <h2 className='bold-40 lg:bold-52 xl:max-w[320px]'> Get for free now!</h2>
                 <p className='regular-18 lg:regular-20'> Available on IOS and android, download now!!</p>
-                <div className='flex w-full flex-col gap-3 whitespace-nowrap lg:flex-row px-32'>
+                <div className='flex w-full flex-col gap-3 whitespace-nowrap lg:flex-row lg:px-32'>
     
                 <Button 
                     type='button'
